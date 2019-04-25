@@ -102,14 +102,14 @@
               <number>2</number>
              </property>
              <item>
-              <widget class="QLabel" name="label">
+              <widget class="QLabel" name="label_depart">
                <property name="text">
                 <string>Point de départ</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QWidget" name="widget_4" native="true">
+              <widget class="QWidget" name="widget_x1" native="true">
                <layout class="QHBoxLayout" name="horizontalLayout_2">
                 <property name="spacing">
                  <number>1</number>
@@ -127,7 +127,7 @@
                  <number>2</number>
                 </property>
                 <item>
-                 <widget class="QLabel" name="label_4">
+                 <widget class="QLabel" name="label_x1">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
                     <horstretch>0</horstretch>
@@ -140,13 +140,13 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QDoubleSpinBox" name="doubleSpinBox_4"/>
+                 <widget class="QDoubleSpinBox" name="spinbox_x1"/>
                 </item>
                </layout>
               </widget>
              </item>
              <item>
-              <widget class="QWidget" name="widget_3" native="true">
+              <widget class="QWidget" name="widget_y1" native="true">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                  <horstretch>0</horstretch>
@@ -170,7 +170,7 @@
                  <number>2</number>
                 </property>
                 <item>
-                 <widget class="QLabel" name="label_5">
+                 <widget class="QLabel" name="label_y1">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
                     <horstretch>0</horstretch>
@@ -183,13 +183,13 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QDoubleSpinBox" name="doubleSpinBox_5"/>
+                 <widget class="QDoubleSpinBox" name="spinbox_y1"/>
                 </item>
                </layout>
               </widget>
              </item>
              <item>
-              <widget class="QWidget" name="widget" native="true">
+              <widget class="QWidget" name="widget_z1" native="true">
                <layout class="QHBoxLayout" name="horizontalLayout_4">
                 <property name="spacing">
                  <number>1</number>
@@ -207,7 +207,7 @@
                  <number>2</number>
                 </property>
                 <item>
-                 <widget class="QLabel" name="label_6">
+                 <widget class="QLabel" name="label_z1">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
                     <horstretch>0</horstretch>
@@ -220,7 +220,7 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QDoubleSpinBox" name="doubleSpinBox_6"/>
+                 <widget class="QDoubleSpinBox" name="spinbox_z1"/>
                 </item>
                </layout>
               </widget>
@@ -253,14 +253,14 @@
               <number>2</number>
              </property>
              <item>
-              <widget class="QLabel" name="label_2">
+              <widget class="QLabel" name="label_arrivee">
                <property name="text">
                 <string>Point d'arrivée</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QWidget" name="horizontalWidget_2" native="true">
+              <widget class="QWidget" name="widget_x2" native="true">
                <layout class="QHBoxLayout" name="horizontalLayout_10">
                 <property name="spacing">
                  <number>1</number>
@@ -278,20 +278,20 @@
                  <number>2</number>
                 </property>
                 <item>
-                 <widget class="QLabel" name="label_7">
+                 <widget class="QLabel" name="label_x2">
                   <property name="text">
                    <string>x :</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QDoubleSpinBox" name="doubleSpinBox"/>
+                 <widget class="QDoubleSpinBox" name="spinbox_x2"/>
                 </item>
                </layout>
               </widget>
              </item>
              <item>
-              <widget class="QWidget" name="horizontalWidget_3" native="true">
+              <widget class="QWidget" name="widget_y2" native="true">
                <layout class="QHBoxLayout" name="horizontalLayout_11">
                 <property name="spacing">
                  <number>1</number>
@@ -309,20 +309,20 @@
                  <number>2</number>
                 </property>
                 <item>
-                 <widget class="QLabel" name="label_8">
+                 <widget class="QLabel" name="label_y2">
                   <property name="text">
                    <string>y : </string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QDoubleSpinBox" name="doubleSpinBox_2"/>
+                 <widget class="QDoubleSpinBox" name="spinbox_y2"/>
                 </item>
                </layout>
               </widget>
              </item>
              <item>
-              <widget class="QWidget" name="horizontalWidget_4" native="true">
+              <widget class="QWidget" name="widget_z2" native="true">
                <layout class="QHBoxLayout" name="horizontalLayout_12">
                 <property name="spacing">
                  <number>1</number>
@@ -340,14 +340,14 @@
                  <number>2</number>
                 </property>
                 <item>
-                 <widget class="QLabel" name="label_3">
+                 <widget class="QLabel" name="label_z2">
                   <property name="text">
                    <string>z : </string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QDoubleSpinBox" name="doubleSpinBox_3"/>
+                 <widget class="QDoubleSpinBox" name="spinbox_z2"/>
                 </item>
                </layout>
               </widget>
