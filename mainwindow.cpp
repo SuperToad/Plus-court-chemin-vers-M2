@@ -294,10 +294,10 @@ void MainWindow::on_pushButton_bordure_clicked()
 void MainWindow::on_pushButton_afficherChemin_clicked()
 {
     // on récupère les sommets de départ et d'arrivée
-//    int indexV1 = ui->spinBox_v1_chemin->value();
-//    int indexV2 = ui->spinBox_v2_chemin->value();
+    int indexV1 = ui->spinBox_v1_chemin->value();
+    int indexV2 = ui->spinBox_v2_chemin->value();
 
-//    showPath(&mesh, indexV1, indexV2);
+    showPath(&mesh, indexV1, indexV2);
 }
 
 
