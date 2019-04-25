@@ -191,113 +191,113 @@ void MainWindow::on_pushButton_bordure_clicked()
     showBorder(&mesh);
 }
 
-void MainWindow::on_pushButton_voisinage_clicked()
-{
-    // changement de mode entre avec et sans voisinage
-    if(modevoisinage)
-    {
-        ui->pushButton_voisinage->setText("Repasser en mode normal");
-        modevoisinage = false;
-    }
-    else
-    {
-        ui->pushButton_voisinage->setText("Passer en mode voisinage");
-        modevoisinage = true;
-    }
+//void MainWindow::on_pushButton_voisinage_clicked()
+//{
+//    // changement de mode entre avec et sans voisinage
+//    if(modevoisinage)
+//    {
+//        ui->pushButton_voisinage->setText("Repasser en mode normal");
+//        modevoisinage = false;
+//    }
+//    else
+//    {
+//        ui->pushButton_voisinage->setText("Passer en mode voisinage");
+//        modevoisinage = true;
+//    }
 
-    // on montre la nouvelle selection
-    if(!modevoisinage)
-        showSelections(&mesh);
-    else
-        showSelectionsNeighborhood(&mesh);
-}
+//    // on montre la nouvelle selection
+//    if(!modevoisinage)
+//        showSelections(&mesh);
+//    else
+//        showSelectionsNeighborhood(&mesh);
+//}
 
 
-void MainWindow::on_pushButton_vertexMoins_clicked()
-{
-    // mise à jour de l'interface
-    vertexSelection = vertexSelection - 1;
-    ui->labelVertex->setText(QString::number(vertexSelection));
+//void MainWindow::on_pushButton_vertexMoins_clicked()
+//{
+//    // mise à jour de l'interface
+//    vertexSelection = vertexSelection - 1;
+//    ui->labelVertex->setText(QString::number(vertexSelection));
 
-    // on montre la nouvelle selection
-    if(!modevoisinage)
-        showSelections(&mesh);
-    else
-        showSelectionsNeighborhood(&mesh);
-}
+//    // on montre la nouvelle selection
+//    if(!modevoisinage)
+//        showSelections(&mesh);
+//    else
+//        showSelectionsNeighborhood(&mesh);
+//}
 
-void MainWindow::on_pushButton_vertexPlus_clicked()
-{
-    // mise à jour de l'interface
-    vertexSelection = vertexSelection + 1;
-    ui->labelVertex->setText(QString::number(vertexSelection));
+//void MainWindow::on_pushButton_vertexPlus_clicked()
+//{
+//    // mise à jour de l'interface
+//    vertexSelection = vertexSelection + 1;
+//    ui->labelVertex->setText(QString::number(vertexSelection));
 
-    // on montre la nouvelle selection
-    if(!modevoisinage)
-        showSelections(&mesh);
-    else
-        showSelectionsNeighborhood(&mesh);
-}
+//    // on montre la nouvelle selection
+//    if(!modevoisinage)
+//        showSelections(&mesh);
+//    else
+//        showSelectionsNeighborhood(&mesh);
+//}
 
-void MainWindow::on_pushButton_edgeMoins_clicked()
-{
-    // mise à jour de l'interface
-    edgeSelection = edgeSelection - 1;
-    ui->labelEdge->setText(QString::number(edgeSelection));
+//void MainWindow::on_pushButton_edgeMoins_clicked()
+//{
+//    // mise à jour de l'interface
+//    edgeSelection = edgeSelection - 1;
+//    ui->labelEdge->setText(QString::number(edgeSelection));
 
-    // on montre la nouvelle selection
-    if(!modevoisinage)
-        showSelections(&mesh);
-    else
-        showSelectionsNeighborhood(&mesh);
-}
+//    // on montre la nouvelle selection
+//    if(!modevoisinage)
+//        showSelections(&mesh);
+//    else
+//        showSelectionsNeighborhood(&mesh);
+//}
 
-void MainWindow::on_pushButton_edgePlus_clicked()
-{
-    // mise à jour de l'interface
-    edgeSelection = edgeSelection + 1;
-    ui->labelEdge->setText(QString::number(edgeSelection));
+//void MainWindow::on_pushButton_edgePlus_clicked()
+//{
+//    // mise à jour de l'interface
+//    edgeSelection = edgeSelection + 1;
+//    ui->labelEdge->setText(QString::number(edgeSelection));
 
-    // on montre la nouvelle selection
-    if(!modevoisinage)
-        showSelections(&mesh);
-    else
-        showSelectionsNeighborhood(&mesh);
-}
+//    // on montre la nouvelle selection
+//    if(!modevoisinage)
+//        showSelections(&mesh);
+//    else
+//        showSelectionsNeighborhood(&mesh);
+//}
 
-void MainWindow::on_pushButton_faceMoins_clicked()
-{
-    // mise à jour de l'interface
-    faceSelection = faceSelection - 1;
-    ui->labelFace->setText(QString::number(faceSelection));
+//void MainWindow::on_pushButton_faceMoins_clicked()
+//{
+//    // mise à jour de l'interface
+//    faceSelection = faceSelection - 1;
+//    ui->labelFace->setText(QString::number(faceSelection));
 
-    // on montre la nouvelle selection
-    if(!modevoisinage)
-        showSelections(&mesh);
-    else
-        showSelectionsNeighborhood(&mesh);
-}
+//    // on montre la nouvelle selection
+//    if(!modevoisinage)
+//        showSelections(&mesh);
+//    else
+//        showSelectionsNeighborhood(&mesh);
+//}
 
-void MainWindow::on_pushButton_facePlus_clicked()
-{
-    // mise à jour de l'interface
-    faceSelection = faceSelection + 1;
-    ui->labelFace->setText(QString::number(faceSelection));
+//void MainWindow::on_pushButton_facePlus_clicked()
+//{
+//    // mise à jour de l'interface
+//    faceSelection = faceSelection + 1;
+//    ui->labelFace->setText(QString::number(faceSelection));
 
-    // on montre la nouvelle selection
-    if(!modevoisinage)
-        showSelections(&mesh);
-    else
-        showSelectionsNeighborhood(&mesh);
-}
+//    // on montre la nouvelle selection
+//    if(!modevoisinage)
+//        showSelections(&mesh);
+//    else
+//        showSelectionsNeighborhood(&mesh);
+//}
 
 void MainWindow::on_pushButton_afficherChemin_clicked()
 {
     // on récupère les sommets de départ et d'arrivée
-    int indexV1 = ui->spinBox_v1_chemin->value();
-    int indexV2 = ui->spinBox_v2_chemin->value();
+//    int indexV1 = ui->spinBox_v1_chemin->value();
+//    int indexV2 = ui->spinBox_v2_chemin->value();
 
-    showPath(&mesh, indexV1, indexV2);
+//    showPath(&mesh, indexV1, indexV2);
 }
 
 
