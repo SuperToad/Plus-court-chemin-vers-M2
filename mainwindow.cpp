@@ -145,6 +145,62 @@ void MainWindow::showBorder(MyMesh* _mesh)
     displayMesh(_mesh);
 }
 
+// Dijkstra
+void init (MyMesh* _mesh, int v1)
+{
+    for (MyMesh::VertexIter v_it=_mesh->vertices_sbegin(); v_it!=_mesh->vertices_end(); ++v_it)
+    {
+        _mesh->data(*v_it).dist = 9999;
+    }
+    VertexHandle vh1 = _mesh->vertex_handle(v1);
+    _mesh->data(vh1).dist = 0;
+}
+
+int trouveMin(MyMesh* _mesh)
+{
+    int mini = 9999;
+    int vMin = -1;
+    for (MyMesh::VertexIter v_it=_mesh->vertices_sbegin(); v_it!=_mesh->vertices_end(); ++v_it)
+    {
+        if (_mesh->data(*v_it).dist < mini)
+        {
+            mini = _mesh->data(*v_it).dist;
+            vMin = (*v_it).idx();
+        }
+    }
+    return vMin;
+}
+
+void majDistances(MyMesh* _mesh, int v1, int v2)
+{
+    VertexHandle vh1 = _mesh->vertex_handle(v1);
+    VertexHandle vh2 = _mesh->vertex_handle(v2);
+    if (_mesh->data(vh2).dist > _mesh->data(vh1).dist) // + Poids(s1,s2)
+    {
+        _mesh->data(vh2).dist = _mesh->data(vh1).dist; // + Poids(s1,s2)
+        _mesh->data(vh2).pred = v1;
+    }
+}
+
+void Dijkstra (MyMesh* _mesh, int v1, int v2)
+{
+    init ( _mesh, v1);
+    QVector<VertexHandle> vertexes;
+    for (MyMesh::VertexIter v_it=_mesh->vertices_sbegin(); v_it!=_mesh->vertices_end(); ++v_it)
+    {
+        vertexes.append(*v_it);
+    }
+    while (!vertexes.empty())
+    {
+        int s1 = trouveMin(_mesh);
+        VertexHandle sh1 = _mesh->vertex_handle(v1);
+        vertexes.remove(sh1.idx());
+        for (MyMesh::VertexVertexIter s2=_mesh->vv_iter(sh1); s2.is_valid(); ++s2)
+        {
+            majDistances(_mesh, s1, s2);
+        }
+    }
+}
 
 void MainWindow::showPath(MyMesh* _mesh, int v1, int v2)
 {
