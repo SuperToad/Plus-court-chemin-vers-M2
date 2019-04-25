@@ -23,9 +23,9 @@ struct MyTraits : public OpenMesh::DefaultTraits
     FaceAttributes( OpenMesh::Attributes::Normal | OpenMesh::Attributes::Color );
     EdgeAttributes( OpenMesh::Attributes::Color );
     // vertex thickness
-    VertexTraits{float thickness;};
+    VertexTraits{float thickness;float dist;int pred; bool fin;};
     // edge thickness
-    EdgeTraits{float thickness;};
+    EdgeTraits{float thickness;float weight;};
 };
 typedef OpenMesh::TriMesh_ArrayKernelT<MyTraits> MyMesh;
 
@@ -43,6 +43,12 @@ public:
     void showSelectionsNeighborhood(MyMesh* _mesh);
     void showPath(MyMesh* _mesh, int v1, int v2);
     void showBorder(MyMesh* _mesh);
+
+    // Dijkstra
+    void init (MyMesh* _mesh, int v1);
+    int trouveMin(MyMesh* _mesh);
+    void majDistances(MyMesh* _mesh, int v1, int v2);
+    void Dijkstra (MyMesh* _mesh, int v1, int v2);
 
     void displayMesh(MyMesh *_mesh);
     void resetAllColorsAndThickness(MyMesh* _mesh);
