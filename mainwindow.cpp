@@ -2,7 +2,7 @@
 #include "ui_mainwindow.h"
 
 /* **** début de la partie à compléter **** */
-
+/*
 void MainWindow::showSelections(MyMesh* _mesh)
 {
     // on réinitialise les couleurs de tout le maillage
@@ -52,7 +52,35 @@ void MainWindow::showSelections(MyMesh* _mesh)
     // on affiche le nouveau maillage
     displayMesh(_mesh);
 }
+*/
 
+void MainWindow::showSelections(MyMesh* _mesh){
+    // on réinitialise les couleurs de tout le maillage
+    resetAllColorsAndThickness(_mesh);
+
+    if(vertex1 < 0 || vertex1 >= _mesh->n_vertices()){
+        qDebug() << "v1 out of bound !";
+        qDebug() << "max =" << _mesh->n_vertices();
+    }else{
+        VertexHandle vh1 = _mesh->vertex_handle(vertex1);
+        _mesh->set_color(vh1, MyMesh::Color(0, 255, 0));
+        _mesh->data(vh1).thickness = 5;
+
+    }
+
+    if( vertex2 < 0 || vertex2 >= _mesh->n_vertices()){
+        qDebug() << "v2 out of bound !";
+        qDebug() << "max =" << _mesh->n_vertices();
+    }
+    else{
+        VertexHandle vh2 = _mesh->vertex_handle(vertex2);
+        _mesh->set_color(vh2, MyMesh::Color(0, 255, 0));
+        _mesh->data(vh2).thickness = 5;
+    }
+
+    // on affiche le nouveau maillage
+    displayMesh(_mesh);
+}
 
 void MainWindow::showSelectionsNeighborhood(MyMesh* _mesh)
 {
@@ -584,3 +612,15 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+
+void MainWindow::on_spinBox_v1_chemin_valueChanged(int arg1)
+{
+    vertex1=arg1;
+    showSelections(&mesh);
+}
+
+void MainWindow::on_spinBox_v2_chemin_valueChanged(int arg1)
+{
+    vertex2=arg1;
+    showSelections(&mesh);
+}

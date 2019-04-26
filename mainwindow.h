@@ -66,12 +66,16 @@ private slots:
 //    void on_pushButton_voisinage_clicked();
 //    void on_pushButton_bordure_clicked();
 
+    void on_spinBox_v1_chemin_valueChanged(int arg1);
+
+    void on_spinBox_v2_chemin_valueChanged(int arg1);
+
 private:
 
     bool modevoisinage;
 
     MyMesh mesh;
-
+    int vertex1,vertex2;
     int vertexSelection;
     int edgeSelection;
     int faceSelection;
