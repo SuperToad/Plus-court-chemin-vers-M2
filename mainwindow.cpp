@@ -146,64 +146,78 @@ void MainWindow::showBorder(MyMesh* _mesh)
 }
 
 // Dijkstra
-void init (MyMesh* _mesh, int v1)
+int MainWindow::trouveMin(MyMesh* _mesh)
 {
-    for (MyMesh::VertexIter v_it=_mesh->vertices_sbegin(); v_it!=_mesh->vertices_end(); ++v_it)
-    {
-        _mesh->data(*v_it).dist = 9999;
-    }
-    VertexHandle vh1 = _mesh->vertex_handle(v1);
-    _mesh->data(vh1).dist = 0;
-}
-
-int trouveMin(MyMesh* _mesh)
-{
-    int mini = 9999;
     int vMin = -1;
+    double distMin = -1;
     for (MyMesh::VertexIter v_it=_mesh->vertices_sbegin(); v_it!=_mesh->vertices_end(); ++v_it)
     {
-        if (_mesh->data(*v_it).dist < mini)
+        if (_mesh->data(*v_it).dist != -1 && _mesh->data(*v_it).checked == false && (_mesh->data(*v_it).dist < distMin || distMin == -1))
         {
-            mini = _mesh->data(*v_it).dist;
+            distMin = _mesh->data(*v_it).dist;
             vMin = (*v_it).idx();
         }
     }
     return vMin;
 }
 
-void majDistances(MyMesh* _mesh, int v1, int v2)
+void MainWindow::majDistances(MyMesh* _mesh, int v1, int v2)
 {
     VertexHandle vh1 = _mesh->vertex_handle(v1);
     VertexHandle vh2 = _mesh->vertex_handle(v2);
-    if (_mesh->data(vh2).dist > _mesh->data(vh1).dist) // + Poids(s1,s2)
+    double dx = _mesh->point(vh1)[0] - _mesh->point(vh2)[0];
+    double dy = _mesh->point(vh1)[1] - _mesh->point(vh2)[1];
+    double dz = _mesh->point(vh1)[2] - _mesh->point(vh2)[2];
+    double DistV1V2= sqrt( dx*dx + dy*dy + dz*dz );
+    double newDist=_mesh->data(vh1).dist + DistV1V2;
+    if (_mesh->data(vh2).dist == -1 || _mesh->data(vh2).dist > newDist)
     {
-        _mesh->data(vh2).dist = _mesh->data(vh1).dist; // + Poids(s1,s2)
+        _mesh->data(vh2).dist = newDist;
         _mesh->data(vh2).pred = v1;
     }
 }
 
-void Dijkstra (MyMesh* _mesh, int v1, int v2)
+int MainWindow::Dijkstra (MyMesh* _mesh, int VertexStart, int VertexEnd)
 {
-    init ( _mesh, v1);
-    QVector<VertexHandle> vertexes;
     for (MyMesh::VertexIter v_it=_mesh->vertices_sbegin(); v_it!=_mesh->vertices_end(); ++v_it)
     {
-        vertexes.append(*v_it);
+        _mesh->data(*v_it).dist = -1;               //endless distance
+        _mesh->data(*v_it).checked = false;         //unchek
+        _mesh->data(*v_it).pred = (*v_it).idx();    //self predecessor
     }
-    while (!vertexes.empty())
+    VertexHandle vh1 = _mesh->vertex_handle(VertexStart);
+    _mesh->data(vh1).dist = 0;
+
+    int currentVertex=VertexStart;
+    while (currentVertex != VertexEnd)
     {
-        int s1 = trouveMin(_mesh);
-        VertexHandle sh1 = _mesh->vertex_handle(v1);
-        vertexes.remove(sh1.idx());
-        for (MyMesh::VertexVertexIter s2=_mesh->vv_iter(sh1); s2.is_valid(); ++s2)
+        VertexHandle vh1 = _mesh->vertex_handle(currentVertex);
+        for (MyMesh::VertexVertexIter VertexNeighbour=_mesh->vv_iter(vh1); VertexNeighbour.is_valid(); ++VertexNeighbour)
         {
-            majDistances(_mesh, s1, s2);
+            majDistances(_mesh, currentVertex, (*VertexNeighbour).idx());
+        }
+        _mesh->data(vh1).checked = true; //chek currentVertex
+        currentVertex = trouveMin(_mesh);
+        if(currentVertex == -1){
+            qDebug() << "pas de chemin trouvé" ;
+            return -1;
         }
     }
+    return 0;
 }
 
 void MainWindow::showPath(MyMesh* _mesh, int v1, int v2)
 {
+    if(v1 < 0 || v1 >= _mesh->n_vertices()){
+        qDebug() << "v1 out of bound !";
+        qDebug() << "max =" << _mesh->n_vertices();
+        return;
+    }if( v2 < 0 || v2 >= _mesh->n_vertices()){
+        qDebug() << "v2 out of bound !";
+        qDebug() << "max =" << _mesh->n_vertices();
+        return;
+    }
+
     // on réinitialise l'affichage
     resetAllColorsAndThickness(_mesh);
 
@@ -213,25 +227,21 @@ void MainWindow::showPath(MyMesh* _mesh, int v1, int v2)
     // point de départ et point d'arrivée en vert et en gros
     _mesh->set_color(vh1, MyMesh::Color(0, 255, 0));
     _mesh->data(vh1).thickness = 9;
-
-    VertexHandle current = vh1;
-
-    while ( current != vh2 ) {
-        HalfedgeHandle hh = _mesh->halfedge_handle(current);
-        EdgeHandle eh = _mesh->edge_handle(hh);
-        VertexHandle next = _mesh->to_vertex_handle(hh);
-
-        _mesh->set_color(next, MyMesh::Color(0, 255, 0));
-        _mesh->data(next).thickness = 5;
-
-        _mesh->set_color(eh, MyMesh::Color(0, 255, 0));
-        _mesh->data(eh).thickness = 3;
-
-        current = next;
-    }
-
     _mesh->set_color(vh2, MyMesh::Color(0, 255, 0));
     _mesh->data(vh2).thickness = 9;
+
+    if(Dijkstra(_mesh, v1, v2) == 0){
+        VertexHandle currentVertex = vh2;
+        currentVertex = _mesh->vertex_handle(_mesh->data(currentVertex).pred);
+        while(currentVertex != vh1){
+            _mesh->set_color(currentVertex, MyMesh::Color(0, 255, 255));
+            _mesh->data(currentVertex).thickness = 5;
+            currentVertex = _mesh->vertex_handle(_mesh->data(currentVertex).pred);
+        }
+    }
+
+
+
 
     // on affiche le nouveau maillage
     displayMesh(_mesh);
@@ -241,11 +251,11 @@ void MainWindow::showPath(MyMesh* _mesh, int v1, int v2)
 
 
 /* **** début de la partie boutons et IHM **** */
-
+/*
 void MainWindow::on_pushButton_bordure_clicked()
 {
     showBorder(&mesh);
-}
+}*/
 
 //void MainWindow::on_pushButton_voisinage_clicked()
 //{

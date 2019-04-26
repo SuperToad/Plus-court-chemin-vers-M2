@@ -5,6 +5,7 @@
 #include <QMainWindow>
 #include <OpenMesh/Core/IO/MeshIO.hh>
 #include <OpenMesh/Core/Mesh/TriMesh_ArrayKernelT.hh>
+#include <math.h>
 
 namespace Ui {
 class MainWindow;
@@ -23,7 +24,7 @@ struct MyTraits : public OpenMesh::DefaultTraits
     FaceAttributes( OpenMesh::Attributes::Normal | OpenMesh::Attributes::Color );
     EdgeAttributes( OpenMesh::Attributes::Color );
     // vertex thickness
-    VertexTraits{float thickness;float dist;int pred; bool fin;};
+    VertexTraits{float thickness;double dist;int pred; bool checked;};
     // edge thickness
     EdgeTraits{float thickness;float weight;};
 };
@@ -45,10 +46,9 @@ public:
     void showBorder(MyMesh* _mesh);
 
     // Dijkstra
-    void init (MyMesh* _mesh, int v1);
     int trouveMin(MyMesh* _mesh);
     void majDistances(MyMesh* _mesh, int v1, int v2);
-    void Dijkstra (MyMesh* _mesh, int v1, int v2);
+    int Dijkstra (MyMesh* _mesh, int v1, int v2);
 
     void displayMesh(MyMesh *_mesh);
     void resetAllColorsAndThickness(MyMesh* _mesh);
@@ -64,7 +64,7 @@ private slots:
 //    void on_pushButton_facePlus_clicked();
     void on_pushButton_afficherChemin_clicked();
 //    void on_pushButton_voisinage_clicked();
-    void on_pushButton_bordure_clicked();
+//    void on_pushButton_bordure_clicked();
 
 private:
 

@@ -140,7 +140,11 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QDoubleSpinBox" name="spinbox_x1"/>
+                 <widget class="QDoubleSpinBox" name="spinbox_x1">
+                  <property name="minimum">
+                   <double>-99.989999999999995</double>
+                  </property>
+                 </widget>
                 </item>
                </layout>
               </widget>
@@ -183,7 +187,11 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QDoubleSpinBox" name="spinbox_y1"/>
+                 <widget class="QDoubleSpinBox" name="spinbox_y1">
+                  <property name="minimum">
+                   <double>-99.989999999999995</double>
+                  </property>
+                 </widget>
                 </item>
                </layout>
               </widget>
@@ -220,7 +228,11 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QDoubleSpinBox" name="spinbox_z1"/>
+                 <widget class="QDoubleSpinBox" name="spinbox_z1">
+                  <property name="minimum">
+                   <double>-99.989999999999995</double>
+                  </property>
+                 </widget>
                 </item>
                </layout>
               </widget>
@@ -285,7 +297,11 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QDoubleSpinBox" name="spinbox_x2"/>
+                 <widget class="QDoubleSpinBox" name="spinbox_x2">
+                  <property name="minimum">
+                   <double>-99.989999999999995</double>
+                  </property>
+                 </widget>
                 </item>
                </layout>
               </widget>
@@ -316,7 +332,11 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QDoubleSpinBox" name="spinbox_y2"/>
+                 <widget class="QDoubleSpinBox" name="spinbox_y2">
+                  <property name="minimum">
+                   <double>-99.989999999999995</double>
+                  </property>
+                 </widget>
                 </item>
                </layout>
               </widget>
@@ -347,7 +367,11 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QDoubleSpinBox" name="spinbox_z2"/>
+                 <widget class="QDoubleSpinBox" name="spinbox_z2">
+                  <property name="minimum">
+                   <double>-99.989999999999995</double>
+                  </property>
+                 </widget>
                 </item>
                </layout>
               </widget>
@@ -421,7 +445,14 @@
               </widget>
              </item>
              <item>
-              <widget class="QSpinBox" name="spinBox_v1_chemin"/>
+              <widget class="QSpinBox" name="spinBox_v1_chemin">
+               <property name="minimum">
+                <number>-1</number>
+               </property>
+               <property name="maximum">
+                <number>9999</number>
+               </property>
+              </widget>
              </item>
              <item>
               <widget class="QLabel" name="label_v2_chemin">
@@ -437,7 +468,17 @@
               </widget>
              </item>
              <item>
-              <widget class="QSpinBox" name="spinBox_v2_chemin"/>
+              <widget class="QSpinBox" name="spinBox_v2_chemin">
+               <property name="minimum">
+                <number>-1</number>
+               </property>
+               <property name="maximum">
+                <number>9999</number>
+               </property>
+               <property name="value">
+                <number>0</number>
+               </property>
+              </widget>
              </item>
             </layout>
            </widget>
