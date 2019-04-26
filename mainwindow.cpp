@@ -232,11 +232,32 @@ void MainWindow::showPath(MyMesh* _mesh, int v1, int v2)
 
     if(Dijkstra(_mesh, v1, v2) == 0){
         VertexHandle currentVertex = vh2;
+        VertexHandle previousVertex = currentVertex;
         currentVertex = _mesh->vertex_handle(_mesh->data(currentVertex).pred);
+        if(currentVertex != vh1){
+            for (MyMesh::VertexEdgeIter edgeTmp1= _mesh->ve_iter(currentVertex);edgeTmp1.is_valid();++edgeTmp1) {
+                for (MyMesh::VertexEdgeIter edgeTmp2= _mesh->ve_iter(previousVertex);edgeTmp2.is_valid();++edgeTmp2) {
+                    if((*edgeTmp1).idx() == (*edgeTmp2).idx()){
+                        _mesh->set_color(edgeTmp1, MyMesh::Color(0, 200, 200));
+                        _mesh->data(edgeTmp1).thickness = 3;
+                    }
+                }
+            }
+        }
         while(currentVertex != vh1){
             _mesh->set_color(currentVertex, MyMesh::Color(0, 255, 255));
             _mesh->data(currentVertex).thickness = 5;
+            previousVertex = currentVertex;
             currentVertex = _mesh->vertex_handle(_mesh->data(currentVertex).pred);
+
+            for (MyMesh::VertexEdgeIter edgeTmp1= _mesh->ve_iter(currentVertex);edgeTmp1.is_valid();++edgeTmp1) {
+                for (MyMesh::VertexEdgeIter edgeTmp2= _mesh->ve_iter(previousVertex);edgeTmp2.is_valid();++edgeTmp2) {
+                    if((*edgeTmp1).idx() == (*edgeTmp2).idx()){
+                        _mesh->set_color(edgeTmp1, MyMesh::Color(0, 200, 200));
+                        _mesh->data(edgeTmp1).thickness = 3;
+                    }
+                }
+            }
         }
     }
 
