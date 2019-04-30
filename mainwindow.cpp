@@ -252,13 +252,22 @@ void MainWindow::showPath(MyMesh* _mesh, int v1, int v2)
     VertexHandle vh1 = _mesh->vertex_handle(v1);
     VertexHandle vh2 = _mesh->vertex_handle(v2);
 
-    // point de départ et point d'arrivée en vert et en gros
-    _mesh->set_color(vh1, MyMesh::Color(0, 255, 0));
-    _mesh->data(vh1).thickness = 9;
-    _mesh->set_color(vh2, MyMesh::Color(0, 255, 0));
-    _mesh->data(vh2).thickness = 9;
+
 
     if(Dijkstra(_mesh, v1, v2) == 0){
+        for (MyMesh::VertexIter v_it=_mesh->vertices_sbegin(); v_it!=_mesh->vertices_end(); ++v_it)
+        {
+            if(_mesh->data(*v_it).checked == true){
+                _mesh->set_color(v_it, MyMesh::Color(255, 0, 0));
+                _mesh->data(v_it).thickness = 2;
+            }
+        }
+        // point de départ et point d'arrivée en vert et en gros
+        _mesh->set_color(vh1, MyMesh::Color(0, 255, 0));
+        _mesh->data(vh1).thickness = 9;
+        _mesh->set_color(vh2, MyMesh::Color(0, 255, 0));
+        _mesh->data(vh2).thickness = 9;
+
         VertexHandle currentVertex = vh2;
         VertexHandle previousVertex = currentVertex;
         currentVertex = _mesh->vertex_handle(_mesh->data(currentVertex).pred);
