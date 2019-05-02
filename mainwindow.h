@@ -65,6 +65,7 @@ private slots:
     void on_pushButton_afficherChemin_clicked();
 //    void on_pushButton_voisinage_clicked();
 //    void on_pushButton_bordure_clicked();
+    void on_pushButton_selectClick_clicked();
 
     void on_spinBox_v1_chemin_valueChanged(int arg1);
 

@@ -296,115 +296,6 @@ void MainWindow::showPath(MyMesh* _mesh, int v1, int v2)
     displayMesh(_mesh);
 }
 
-/* **** fin de la partie à compléter **** */
-
-
-/* **** début de la partie boutons et IHM **** */
-/*
-void MainWindow::on_pushButton_bordure_clicked()
-{
-    showBorder(&mesh);
-}*/
-
-//void MainWindow::on_pushButton_voisinage_clicked()
-//{
-//    // changement de mode entre avec et sans voisinage
-//    if(modevoisinage)
-//    {
-//        ui->pushButton_voisinage->setText("Repasser en mode normal");
-//        modevoisinage = false;
-//    }
-//    else
-//    {
-//        ui->pushButton_voisinage->setText("Passer en mode voisinage");
-//        modevoisinage = true;
-//    }
-
-//    // on montre la nouvelle selection
-//    if(!modevoisinage)
-//        showSelections(&mesh);
-//    else
-//        showSelectionsNeighborhood(&mesh);
-//}
-
-
-//void MainWindow::on_pushButton_vertexMoins_clicked()
-//{
-//    // mise à jour de l'interface
-//    vertexSelection = vertexSelection - 1;
-//    ui->labelVertex->setText(QString::number(vertexSelection));
-
-//    // on montre la nouvelle selection
-//    if(!modevoisinage)
-//        showSelections(&mesh);
-//    else
-//        showSelectionsNeighborhood(&mesh);
-//}
-
-//void MainWindow::on_pushButton_vertexPlus_clicked()
-//{
-//    // mise à jour de l'interface
-//    vertexSelection = vertexSelection + 1;
-//    ui->labelVertex->setText(QString::number(vertexSelection));
-
-//    // on montre la nouvelle selection
-//    if(!modevoisinage)
-//        showSelections(&mesh);
-//    else
-//        showSelectionsNeighborhood(&mesh);
-//}
-
-//void MainWindow::on_pushButton_edgeMoins_clicked()
-//{
-//    // mise à jour de l'interface
-//    edgeSelection = edgeSelection - 1;
-//    ui->labelEdge->setText(QString::number(edgeSelection));
-
-//    // on montre la nouvelle selection
-//    if(!modevoisinage)
-//        showSelections(&mesh);
-//    else
-//        showSelectionsNeighborhood(&mesh);
-//}
-
-//void MainWindow::on_pushButton_edgePlus_clicked()
-//{
-//    // mise à jour de l'interface
-//    edgeSelection = edgeSelection + 1;
-//    ui->labelEdge->setText(QString::number(edgeSelection));
-
-//    // on montre la nouvelle selection
-//    if(!modevoisinage)
-//        showSelections(&mesh);
-//    else
-//        showSelectionsNeighborhood(&mesh);
-//}
-
-//void MainWindow::on_pushButton_faceMoins_clicked()
-//{
-//    // mise à jour de l'interface
-//    faceSelection = faceSelection - 1;
-//    ui->labelFace->setText(QString::number(faceSelection));
-
-//    // on montre la nouvelle selection
-//    if(!modevoisinage)
-//        showSelections(&mesh);
-//    else
-//        showSelectionsNeighborhood(&mesh);
-//}
-
-//void MainWindow::on_pushButton_facePlus_clicked()
-//{
-//    // mise à jour de l'interface
-//    faceSelection = faceSelection + 1;
-//    ui->labelFace->setText(QString::number(faceSelection));
-
-//    // on montre la nouvelle selection
-//    if(!modevoisinage)
-//        showSelections(&mesh);
-//    else
-//        showSelectionsNeighborhood(&mesh);
-//}
 
 void MainWindow::on_pushButton_afficherChemin_clicked()
 {
@@ -612,6 +503,11 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+
+void MainWindow::on_pushButton_selectClick_clicked()
+{
+    ui->displayWidget->select_click_mode = true;
+}
 
 void MainWindow::on_spinBox_v1_chemin_valueChanged(int arg1)
 {

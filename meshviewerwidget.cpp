@@ -6,6 +6,10 @@ MeshViewerWidget::MeshViewerWidget(QWidget*_parent) : QGLWidget(_parent)
     linesToDraw = 0;
     pointsToDraw = 0;
 
+    select_click_mode = false;
+    point_1 = nullptr;
+    point_2 = nullptr;
+
     setMouseTracking(true);
     setFocus();
 }
@@ -125,7 +129,7 @@ void MeshViewerWidget::loadLines(GLfloat* verts, GLfloat* colors, int nVerts, GL
 
 void MeshViewerWidget::loadPoints(GLfloat* verts, GLfloat* colors, int nVerts, GLuint* points, int nPoints, QList<QPair<float, int> > vs)
 {
-    GLfloat* pointsColsArray = new GLfloat[nVerts * 2];
+    GLfloat* pointsColsArray = new GLfloat[(nVerts+2*3*2) * 2];
 
     for(int i = 0; i < nVerts; i = i + 3)
     {
@@ -139,14 +143,40 @@ void MeshViewerWidget::loadPoints(GLfloat* verts, GLfloat* colors, int nVerts, G
         pointsColsArray[j+5] = verts[i+2];
     }
 
+    int nb_e = nVerts*2;
+    // Point de départ
+    pointsColsArray[nb_e] = 0;
+    pointsColsArray[nb_e+1] = 1;
+    pointsColsArray[nb_e+2] = 0;
+
+    pointsColsArray[nb_e+3] = 0;
+    pointsColsArray[nb_e+4] = 0;
+    pointsColsArray[nb_e+5] = 0;
+
+    // Point d'arrivée
+    pointsColsArray[nb_e+6] = 1;
+    pointsColsArray[nb_e+7] = 0;
+    pointsColsArray[nb_e+8] = 0;
+
+    pointsColsArray[nb_e+9] = 0;
+    pointsColsArray[nb_e+10] = 0;
+    pointsColsArray[nb_e+11] = 0;
+
     glGenBuffers( 2, PointsDataBuffers );
 
+    qDebug() << nPoints << nVerts;
+    GLuint* newpoints = new GLuint[GLuint(nPoints)+2];
+
+    for (int i = 0 ; i < nPoints ; ++i)
+        newpoints[i] = points[i];
+    newpoints[nPoints] = GLuint(nPoints);
+    newpoints[nPoints+1] = GLuint(nPoints)+1;
 
     glBindBuffer(GL_ARRAY_BUFFER, PointsDataBuffers[0]);
-    glBufferData(GL_ARRAY_BUFFER, nVerts * 2 * sizeof(GLfloat), pointsColsArray, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, (nVerts+2) * 2 * sizeof(GLfloat), pointsColsArray, GL_STATIC_DRAW);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, PointsDataBuffers[1]);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, nPoints * sizeof(GLuint), points, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, (nPoints+2) * sizeof(GLuint), newpoints, GL_STATIC_DRAW);
 
     pointsToDraw = nPoints;
 
@@ -235,22 +265,69 @@ void MeshViewerWidget::paintGL()
         // on charge la partie [x, y, z]
         glVertexPointer( 3, GL_FLOAT, 6 * sizeof(float), ((float*)NULL + (3)) );
 
+
         // on charge le buffer 1 : une liste d'ID [v0] (1 int)
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, PointsDataBuffers[1]);
 
         glEnableClientState( GL_VERTEX_ARRAY );
         glEnableClientState( GL_COLOR_ARRAY );
 
-        int cur = 0;
-        for(int i = 0; i < vertsSizes.count(); i++)
+        for(int i = 0 ; i < vertsSizes.count() ; i++)
         {
+            if (point_1 != nullptr && i == 0)
+            {
+                GLdouble* matrix = modelview_matrix_;
+                glMatrixMode( GL_MODELVIEW );
+                glLoadIdentity();
+                glLoadMatrixd( matrix );
+                glTranslated( (*point_1)[0], (*point_1)[1], (*point_1)[2] );
+            }
+            else if (point_2 != nullptr && i == 1)
+            {
+                GLdouble* matrix = modelview_matrix_;
+                glMatrixMode( GL_MODELVIEW );
+                glLoadIdentity();
+                glLoadMatrixd( matrix );
+                glTranslated( (*point_2)[0], (*point_2)[1], (*point_2)[2] );
+            }
             glPointSize(vertsSizes.at(i).first);
-            glDrawElements(GL_POINTS, vertsSizes.at(i).second, GL_UNSIGNED_INT, (GLvoid*)(sizeof(GLfloat) * cur));
-            cur = cur + vertsSizes.at(i).second;
+            glDrawElements(GL_POINTS, 1, GL_UNSIGNED_INT, (GLvoid*)(sizeof(GLfloat) * vertsSizes.at(i).second)); //(GLvoid*)(sizeof(GLfloat) * cur)
+
+            if ((point_1 != nullptr && i == 0) || (point_2 != nullptr && i == 1))
+            {
+                glLoadMatrixd( modelview_matrix_ );
+                glGetDoublev( GL_MODELVIEW, modelview_matrix_);
+            }
         }
+
+
+//        int cur = 0;
+//        for(int i = 2; i < vertsSizes.count(); i++)
+//        {
+//            glPointSize(vertsSizes.at(i).first);
+//            glDrawElements(GL_POINTS, vertsSizes.at(i).second, GL_UNSIGNED_INT, (GLvoid*)(sizeof(GLfloat) * cur));
+//            cur = cur + vertsSizes.at(i).second;
+//        }
+
+
+
+//        qDebug() << "testino";
+//        if (point_1 != nullptr || point_2 != nullptr)
+//        {
+//            qDebug() << "panivino";
+//            glPointSize (7.0f);
+//            int i = vertsSizes.count()-3;
+//            if (point_1 != nullptr)
+//                glDrawElements(GL_POINTS, 1, GL_UNSIGNED_INT, (GLvoid*)(sizeof(GLfloat) * cur));
+//            cur = cur + vertsSizes.at(i).second;
+//            ++i;
+//            if (point_2 != nullptr)
+//                glDrawElements(GL_POINTS, 1, GL_UNSIGNED_INT, (GLvoid*)(sizeof(GLfloat) * cur));
+//        }
 
         glDisableClientState( GL_COLOR_ARRAY );
         glDisableClientState( GL_VERTEX_ARRAY );
+
     }
 }
 
@@ -279,7 +356,34 @@ void MeshViewerWidget::view_all()
 
 void MeshViewerWidget::mousePressEvent( QMouseEvent* _event )
 {
-    last_point_ok_ = map_to_sphere( last_point_2D_=_event->pos(), last_point_3D_ );
+    if (select_click_mode)
+    {
+        last_point_ok_ = map_to_sphere( last_point_2D_=_event->pos(), last_point_3D_ );
+        qDebug() << __FUNCTION__<< "clicked at" << last_point_3D_.data()[0] << last_point_3D_.data()[1] << last_point_3D_.data()[2];
+
+        if (point_1 == nullptr)
+        {
+            if (vertsSizes.count() > 0)
+                vertsSizes[0] = (QPair<float,int>(7.0,pointsToDraw));
+            else
+                vertsSizes.append(QPair<float,int>(7.0,pointsToDraw));
+            point_1 = new VectorT<float,3>(last_point_3D_);
+        }
+        else
+        {
+            if (vertsSizes.count() > 1)
+                vertsSizes[1] = (QPair<float,int>(7.0,pointsToDraw+1));
+            else
+                vertsSizes.append(QPair<float,int>(7.0,pointsToDraw+1));
+            point_2 = new VectorT<float,3>(last_point_3D_);
+        }
+
+        select_click_mode = false;
+    }
+    else
+    {
+        last_point_ok_ = map_to_sphere( last_point_2D_=_event->pos(), last_point_3D_ );
+    }
 }
 
 void MeshViewerWidget::mouseMoveEvent( QMouseEvent* _event )
@@ -337,6 +441,7 @@ void MeshViewerWidget::mouseMoveEvent( QMouseEvent* _event )
     last_point_3D_ = newPoint3D;
     last_point_ok_ = newPoint_hitSphere;
     updateGL();
+
 }
 
 void MeshViewerWidget::mouseReleaseEvent( QMouseEvent* /* _event */ )

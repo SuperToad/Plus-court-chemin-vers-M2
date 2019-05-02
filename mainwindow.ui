@@ -383,6 +383,13 @@
         </widget>
        </item>
        <item>
+        <widget class="QPushButton" name="pushButton_selectClick">
+         <property name="text">
+          <string>Mode sélection par clic</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QLabel" name="label_9">
          <property name="text">
           <string>Sélection par sommet</string>
