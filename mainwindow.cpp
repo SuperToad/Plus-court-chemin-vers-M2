@@ -66,6 +66,16 @@ void MainWindow::showSelections(MyMesh* _mesh){
         _mesh->set_color(vh1, MyMesh::Color(0, 255, 0));
         _mesh->data(vh1).thickness = 5;
 
+        FaceHandle fh = _mesh->face_handle(vertex1);
+        MyMesh::Point center1 = MyMesh::Point(0);
+        MyMesh::FaceVertexIter fh_v = mesh.fv_iter(fh);
+        for(; fh_v.is_valid(); ++fh_v)
+        {
+            VertexHandle vertexHandle = *fh_v;
+            center1 += _mesh->point(vertexHandle);
+        }
+        center1/=3;
+        qDebug() << center1[0] << center1[1] << center1[2];
     }
 
     if( vertex2 < 0 || vertex2 >= _mesh->n_vertices()){
@@ -76,6 +86,17 @@ void MainWindow::showSelections(MyMesh* _mesh){
         VertexHandle vh2 = _mesh->vertex_handle(vertex2);
         _mesh->set_color(vh2, MyMesh::Color(0, 255, 0));
         _mesh->data(vh2).thickness = 5;
+
+        FaceHandle fh = _mesh->face_handle(vertex2);
+        MyMesh::Point center2 = MyMesh::Point(0);
+        MyMesh::FaceVertexIter fh_v = mesh.fv_iter(fh);
+        for(; fh_v.is_valid(); ++fh_v)
+        {
+            VertexHandle vertexHandle = *fh_v;
+            center2 += _mesh->point(vertexHandle);
+        }
+        center2/=3;
+        qDebug() << center2[0] << center2[1] << center2[2];
     }
 
     // on affiche le nouveau maillage
