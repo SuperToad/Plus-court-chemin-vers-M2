@@ -58,9 +58,9 @@ void MainWindow::showSelections(MyMesh* _mesh){
     // on réinitialise les couleurs de tout le maillage
     resetAllColorsAndThickness(_mesh);
 
-    if(vertex1 < 0 || vertex1 >= _mesh->n_vertices()){
-        qDebug() << "v1 out of bound !";
-        qDebug() << "max =" << _mesh->n_vertices();
+    if(vertex1 < 0 || vertex1 >= _mesh->n_faces()){
+        qDebug() << "f1 out of bound !";
+        qDebug() << "max =" << _mesh->n_faces();
     }else{
         VertexHandle vh1 = _mesh->vertex_handle(vertex1);
         _mesh->set_color(vh1, MyMesh::Color(0, 255, 0));
@@ -75,12 +75,14 @@ void MainWindow::showSelections(MyMesh* _mesh){
             center1 += _mesh->point(vertexHandle);
         }
         center1/=3;
-        qDebug() << center1[0] << center1[1] << center1[2];
+        ui->spinbox_x1->setValue(center1[0]);
+        ui->spinbox_y1->setValue(center1[1]);
+        ui->spinbox_z1->setValue(center1[2]);
     }
 
-    if( vertex2 < 0 || vertex2 >= _mesh->n_vertices()){
-        qDebug() << "v2 out of bound !";
-        qDebug() << "max =" << _mesh->n_vertices();
+    if( vertex2 < 0 || vertex2 >= _mesh->n_faces()){
+        qDebug() << "f2 out of bound !";
+        qDebug() << "max =" << _mesh->n_faces();
     }
     else{
         VertexHandle vh2 = _mesh->vertex_handle(vertex2);
@@ -96,7 +98,9 @@ void MainWindow::showSelections(MyMesh* _mesh){
             center2 += _mesh->point(vertexHandle);
         }
         center2/=3;
-        qDebug() << center2[0] << center2[1] << center2[2];
+        ui->spinbox_x2->setValue(center2[0]);
+        ui->spinbox_y2->setValue(center2[1]);
+        ui->spinbox_z2->setValue(center2[2]);
     }
 
     // on affiche le nouveau maillage

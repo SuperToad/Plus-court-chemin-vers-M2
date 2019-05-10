@@ -141,6 +141,9 @@
                 </item>
                 <item>
                  <widget class="QDoubleSpinBox" name="spinbox_x1">
+                  <property name="decimals">
+                   <number>7</number>
+                  </property>
                   <property name="minimum">
                    <double>-99.989999999999995</double>
                   </property>
@@ -188,6 +191,9 @@
                 </item>
                 <item>
                  <widget class="QDoubleSpinBox" name="spinbox_y1">
+                  <property name="decimals">
+                   <number>7</number>
+                  </property>
                   <property name="minimum">
                    <double>-99.989999999999995</double>
                   </property>
@@ -229,6 +235,9 @@
                 </item>
                 <item>
                  <widget class="QDoubleSpinBox" name="spinbox_z1">
+                  <property name="decimals">
+                   <number>7</number>
+                  </property>
                   <property name="minimum">
                    <double>-99.989999999999995</double>
                   </property>
@@ -298,6 +307,9 @@
                 </item>
                 <item>
                  <widget class="QDoubleSpinBox" name="spinbox_x2">
+                  <property name="decimals">
+                   <number>7</number>
+                  </property>
                   <property name="minimum">
                    <double>-99.989999999999995</double>
                   </property>
@@ -333,6 +345,9 @@
                 </item>
                 <item>
                  <widget class="QDoubleSpinBox" name="spinbox_y2">
+                  <property name="decimals">
+                   <number>7</number>
+                  </property>
                   <property name="minimum">
                    <double>-99.989999999999995</double>
                   </property>
@@ -368,6 +383,9 @@
                 </item>
                 <item>
                  <widget class="QDoubleSpinBox" name="spinbox_z2">
+                  <property name="decimals">
+                   <number>7</number>
+                  </property>
                   <property name="minimum">
                    <double>-99.989999999999995</double>
                   </property>
