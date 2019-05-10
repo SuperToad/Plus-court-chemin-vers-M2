@@ -24,9 +24,9 @@ struct MyTraits : public OpenMesh::DefaultTraits
     FaceAttributes( OpenMesh::Attributes::Normal | OpenMesh::Attributes::Color );
     EdgeAttributes( OpenMesh::Attributes::Color );
     // vertex thickness
-    VertexTraits{float thickness;double dist;int pred; bool checked;};
+    VertexTraits{float thickness;float dist;int pred; bool checked; bool isEnd;};
     // edge thickness
-    EdgeTraits{float thickness;float weight;};
+    EdgeTraits{float thickness;};
 };
 typedef OpenMesh::TriMesh_ArrayKernelT<MyTraits> MyMesh;
 
@@ -41,14 +41,15 @@ public:
 
     // les 4 fonctions à compléter
     void showSelections(MyMesh* _mesh);
-    void showSelectionsNeighborhood(MyMesh* _mesh);
-    void showPath(MyMesh* _mesh, int v1, int v2);
-    void showBorder(MyMesh* _mesh);
+    //void showSelectionsNeighborhood(MyMesh* _mesh);
+    void showPath(MyMesh* _mesh);
+    //void showBorder(MyMesh* _mesh);
 
     // Dijkstra
     int trouveMin(MyMesh* _mesh);
-    void majDistances(MyMesh* _mesh, int v1, int v2);
-    int Dijkstra (MyMesh* _mesh, int v1, int v2);
+    float calculDistances(MyMesh::Point p1, MyMesh::Point p2);
+    void majDistances(MyMesh* _mesh, int v);
+    int Dijkstra (MyMesh* _mesh, int faceStart, int faceEnd);
 
     void displayMesh(MyMesh *_mesh);
     void resetAllColorsAndThickness(MyMesh* _mesh);
@@ -74,11 +75,16 @@ private:
 
     bool modevoisinage;
 
-    MyMesh mesh;
-    int vertex1,vertex2;
     int vertexSelection;
     int edgeSelection;
     int faceSelection;
+
+    MyMesh mesh;
+    int face1=0,face2=0;    //face sur les quelles sont les points sélectionnés
+    float finalDist;
+    int finalPred;
+    MyMesh::Point pointStart, pointEnd;
+
 
     Ui::MainWindow *ui;
 };

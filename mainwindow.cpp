@@ -54,59 +54,7 @@ void MainWindow::showSelections(MyMesh* _mesh)
 }
 */
 
-void MainWindow::showSelections(MyMesh* _mesh){
-    // on réinitialise les couleurs de tout le maillage
-    resetAllColorsAndThickness(_mesh);
-
-    if(vertex1 < 0 || vertex1 >= _mesh->n_faces()){
-        qDebug() << "f1 out of bound !";
-        qDebug() << "max =" << _mesh->n_faces();
-    }else{
-        VertexHandle vh1 = _mesh->vertex_handle(vertex1);
-        _mesh->set_color(vh1, MyMesh::Color(0, 255, 0));
-        _mesh->data(vh1).thickness = 5;
-
-        FaceHandle fh = _mesh->face_handle(vertex1);
-        MyMesh::Point center1 = MyMesh::Point(0);
-        MyMesh::FaceVertexIter fh_v = mesh.fv_iter(fh);
-        for(; fh_v.is_valid(); ++fh_v)
-        {
-            VertexHandle vertexHandle = *fh_v;
-            center1 += _mesh->point(vertexHandle);
-        }
-        center1/=3;
-        ui->spinbox_x1->setValue(center1[0]);
-        ui->spinbox_y1->setValue(center1[1]);
-        ui->spinbox_z1->setValue(center1[2]);
-    }
-
-    if( vertex2 < 0 || vertex2 >= _mesh->n_faces()){
-        qDebug() << "f2 out of bound !";
-        qDebug() << "max =" << _mesh->n_faces();
-    }
-    else{
-        VertexHandle vh2 = _mesh->vertex_handle(vertex2);
-        _mesh->set_color(vh2, MyMesh::Color(0, 255, 0));
-        _mesh->data(vh2).thickness = 5;
-
-        FaceHandle fh = _mesh->face_handle(vertex2);
-        MyMesh::Point center2 = MyMesh::Point(0);
-        MyMesh::FaceVertexIter fh_v = mesh.fv_iter(fh);
-        for(; fh_v.is_valid(); ++fh_v)
-        {
-            VertexHandle vertexHandle = *fh_v;
-            center2 += _mesh->point(vertexHandle);
-        }
-        center2/=3;
-        ui->spinbox_x2->setValue(center2[0]);
-        ui->spinbox_y2->setValue(center2[1]);
-        ui->spinbox_z2->setValue(center2[2]);
-    }
-
-    // on affiche le nouveau maillage
-    displayMesh(_mesh);
-}
-
+/*
 void MainWindow::showSelectionsNeighborhood(MyMesh* _mesh)
 {
     // on réinitialise les couleurs de tout le maillage
@@ -179,8 +127,6 @@ void MainWindow::showSelectionsNeighborhood(MyMesh* _mesh)
     displayMesh(_mesh);
 }
 
-
-
 void MainWindow::showBorder(MyMesh* _mesh)
 {
     // on réinitialise l'affichage
@@ -197,12 +143,60 @@ void MainWindow::showBorder(MyMesh* _mesh)
     }
     displayMesh(_mesh);
 }
+*/
+
+void MainWindow::showSelections(MyMesh* _mesh){
+    // on réinitialise les couleurs de tout le maillage
+    resetAllColorsAndThickness(_mesh);
+
+    if(face1 < 0 || face1 >= _mesh->n_faces()){
+        qDebug() << "f1 out of bound !";
+        qDebug() << "max =" << _mesh->n_faces();
+    }else{
+        FaceHandle fh = _mesh->face_handle(face1);
+        _mesh->set_color(fh, MyMesh::Color(0, 255, 0));
+        MyMesh::FaceVertexIter fh_v = _mesh->fv_iter(fh);
+        pointStart = MyMesh::Point(0);
+        for(; fh_v.is_valid(); ++fh_v)
+        {
+            VertexHandle vertexHandle = *fh_v;
+            pointStart += _mesh->point(vertexHandle);
+        }
+        pointStart/=3;
+        ui->spinbox_x1->setValue(pointStart[0]);
+        ui->spinbox_y1->setValue(pointStart[1]);
+        ui->spinbox_z1->setValue(pointStart[2]);
+    }
+
+    if( face2 < 0 || face2 >= _mesh->n_faces()){
+        qDebug() << "f2 out of bound !";
+        qDebug() << "max =" << _mesh->n_faces();
+    }
+    else{
+        FaceHandle fh = _mesh->face_handle(face2);
+        _mesh->set_color(fh, MyMesh::Color(0, 255, 0));
+        MyMesh::FaceVertexIter fh_v = _mesh->fv_iter(fh);
+        pointEnd = MyMesh::Point(0);
+        for(; fh_v.is_valid(); ++fh_v)
+        {
+            VertexHandle vertexHandle = *fh_v;
+            pointEnd += _mesh->point(vertexHandle);
+        }
+        pointEnd/=3;
+        ui->spinbox_x2->setValue(pointEnd[0]);
+        ui->spinbox_y2->setValue(pointEnd[1]);
+        ui->spinbox_z2->setValue(pointEnd[2]);
+    }
+
+    // on affiche le nouveau maillage
+    displayMesh(_mesh);
+}
 
 // Dijkstra
 int MainWindow::trouveMin(MyMesh* _mesh)
 {
     int vMin = -1;
-    double distMin = -1;
+    float distMin = -1;
     for (MyMesh::VertexIter v_it=_mesh->vertices_sbegin(); v_it!=_mesh->vertices_end(); ++v_it)
     {
         if (_mesh->data(*v_it).dist != -1 && _mesh->data(*v_it).checked == false && (_mesh->data(*v_it).dist < distMin || distMin == -1))
@@ -214,43 +208,72 @@ int MainWindow::trouveMin(MyMesh* _mesh)
     return vMin;
 }
 
-void MainWindow::majDistances(MyMesh* _mesh, int v1, int v2)
+float MainWindow::calculDistances( MyMesh::Point p1, MyMesh::Point p2){
+    float dx = p1[0] - p2[0];
+    float dy = p1[1] - p2[1];
+    float dz = p1[2] - p2[2];
+    return sqrt( dx*dx + dy*dy + dz*dz );
+}
+
+void MainWindow::majDistances(MyMesh* _mesh, int v1)
 {
     VertexHandle vh1 = _mesh->vertex_handle(v1);
-    VertexHandle vh2 = _mesh->vertex_handle(v2);
-    double dx = _mesh->point(vh1)[0] - _mesh->point(vh2)[0];
-    double dy = _mesh->point(vh1)[1] - _mesh->point(vh2)[1];
-    double dz = _mesh->point(vh1)[2] - _mesh->point(vh2)[2];
-    double DistV1V2= sqrt( dx*dx + dy*dy + dz*dz );
-    double newDist=_mesh->data(vh1).dist + DistV1V2;
-    if (_mesh->data(vh2).dist == -1 || _mesh->data(vh2).dist > newDist)
+    float distV1 = _mesh->data(vh1).dist;
+    for (MyMesh::VertexVertexIter VertexNeighbour=_mesh->vv_iter(vh1); VertexNeighbour.is_valid(); ++VertexNeighbour)
     {
-        _mesh->data(vh2).dist = newDist;
-        _mesh->data(vh2).pred = v1;
+        VertexHandle vh2 = *VertexNeighbour;
+        float newDist=distV1 + calculDistances( _mesh->point(vh1), _mesh->point(vh2));
+        if (_mesh->data(vh2).dist == -1 || _mesh->data(vh2).dist > newDist)
+        {
+            _mesh->data(vh2).dist = newDist;
+            _mesh->data(vh2).pred = v1;
+        }
+    }
+    if(_mesh->data(vh1).isEnd)
+    {
+        float newDist=distV1 + calculDistances( _mesh->point(vh1), pointEnd);
+        if (finalDist == -1 || finalDist > newDist)
+        {
+            finalDist = newDist;
+            finalPred = v1;
+        }
     }
 }
 
-int MainWindow::Dijkstra (MyMesh* _mesh, int VertexStart, int VertexEnd)
+int MainWindow::Dijkstra (MyMesh* _mesh, int faceStart, int faceEnd)
 {
+    //initialisation
     for (MyMesh::VertexIter v_it=_mesh->vertices_sbegin(); v_it!=_mesh->vertices_end(); ++v_it)
     {
         _mesh->data(*v_it).dist = -1;               //endless distance
         _mesh->data(*v_it).checked = false;         //unchek
+        _mesh->data(*v_it).isEnd = false;           //unchek
         _mesh->data(*v_it).pred = (*v_it).idx();    //self predecessor
     }
-    VertexHandle vh1 = _mesh->vertex_handle(VertexStart);
-    _mesh->data(vh1).dist = 0;
 
-    int currentVertex=VertexStart;
-    while (currentVertex != VertexEnd)
+    MyMesh::FaceVertexIter fv_it = _mesh->fv_iter(_mesh->face_handle(faceStart));
+    for(; fv_it.is_valid(); ++fv_it)
     {
-        VertexHandle vh1 = _mesh->vertex_handle(currentVertex);
-        for (MyMesh::VertexVertexIter VertexNeighbour=_mesh->vv_iter(vh1); VertexNeighbour.is_valid(); ++VertexNeighbour)
-        {
-            majDistances(_mesh, currentVertex, (*VertexNeighbour).idx());
-        }
-        _mesh->data(vh1).checked = true; //chek currentVertex
+        _mesh->data(*fv_it).dist=calculDistances(_mesh->point(*fv_it),pointStart);
+    }
+
+    fv_it = _mesh->fv_iter(_mesh->face_handle(faceEnd));
+    for(; fv_it.is_valid(); ++fv_it)
+    {
+        _mesh->data(*fv_it).isEnd=true;
+    }
+
+    int currentVertex=trouveMin(_mesh);
+    finalDist=-1;
+    //fin initialisation
+
+
+    while (finalDist == -1 || finalDist > _mesh->data(_mesh->vertex_handle(currentVertex)).dist )
+    {
+        majDistances(_mesh, currentVertex);
+        _mesh->data(_mesh->vertex_handle(currentVertex)).checked = true; //chek currentVertex
         currentVertex = trouveMin(_mesh);
+
         if(currentVertex == -1){
             qDebug() << "pas de chemin trouvé" ;
             return -1;
@@ -259,27 +282,20 @@ int MainWindow::Dijkstra (MyMesh* _mesh, int VertexStart, int VertexEnd)
     return 0;
 }
 
-void MainWindow::showPath(MyMesh* _mesh, int v1, int v2)
+void MainWindow::showPath(MyMesh* _mesh)
 {
-    if(v1 < 0 || v1 >= _mesh->n_vertices()){
+    if(face1 < 0 || face1 >= _mesh->n_faces()){
         qDebug() << "v1 out of bound !";
-        qDebug() << "max =" << _mesh->n_vertices();
+        qDebug() << "max =" << _mesh->n_faces();
         return;
-    }if( v2 < 0 || v2 >= _mesh->n_vertices()){
+    }if( face2 < 0 || face2 >= _mesh->n_faces()){
         qDebug() << "v2 out of bound !";
-        qDebug() << "max =" << _mesh->n_vertices();
+        qDebug() << "max =" << _mesh->n_faces();
         return;
     }
 
-    // on réinitialise l'affichage
-    resetAllColorsAndThickness(_mesh);
-
-    VertexHandle vh1 = _mesh->vertex_handle(v1);
-    VertexHandle vh2 = _mesh->vertex_handle(v2);
-
-
-
-    if(Dijkstra(_mesh, v1, v2) == 0){
+    if(Dijkstra(_mesh, face1, face2) == 0){
+        qDebug() << "distance :" << finalDist;
         for (MyMesh::VertexIter v_it=_mesh->vertices_sbegin(); v_it!=_mesh->vertices_end(); ++v_it)
         {
             if(_mesh->data(*v_it).checked == true){
@@ -287,44 +303,52 @@ void MainWindow::showPath(MyMesh* _mesh, int v1, int v2)
                 _mesh->data(v_it).thickness = 2;
             }
         }
+        // on réinitialise l'affichage
+        resetAllColorsAndThickness(_mesh);
+
+        //affichage des face à défaut des points
+        FaceHandle vh1 = _mesh->face_handle(face1);
+        FaceHandle vh2 = _mesh->face_handle(face2);
+        _mesh->set_color(vh1, MyMesh::Color(0, 255, 0));
+        _mesh->set_color(vh2, MyMesh::Color(0, 255, 0));
+
+        for (MyMesh::VertexIter v_it=_mesh->vertices_sbegin(); v_it!=_mesh->vertices_end(); ++v_it)
+        {
+            if(_mesh->data(*v_it).checked == true){
+                _mesh->set_color(v_it, MyMesh::Color(255, 0, 0));
+                _mesh->data(v_it).thickness = 4;
+            }
+        }
+
+        VertexHandle currentVertex = _mesh->vertex_handle(finalPred);
+        _mesh->set_color(currentVertex, MyMesh::Color(0, 255, 255));
+        _mesh->data(currentVertex).thickness = 5;
+        VertexHandle previousVertex = currentVertex;
+        currentVertex = _mesh->vertex_handle(_mesh->data(currentVertex).pred);
+        while(currentVertex != previousVertex){
+            _mesh->set_color(currentVertex, MyMesh::Color(0, 255, 255));
+            _mesh->data(currentVertex).thickness = 5;
+
+            for (MyMesh::VertexEdgeIter edgeTmp1= _mesh->ve_iter(currentVertex);edgeTmp1.is_valid();++edgeTmp1) {
+                for (MyMesh::VertexEdgeIter edgeTmp2= _mesh->ve_iter(previousVertex);edgeTmp2.is_valid();++edgeTmp2) {
+                    if((*edgeTmp1).idx() == (*edgeTmp2).idx()){
+                        _mesh->set_color(edgeTmp1, MyMesh::Color(0, 200, 200));
+                        _mesh->data(edgeTmp1).thickness = 3;
+                    }
+                }
+            }
+            previousVertex = currentVertex;
+            currentVertex = _mesh->vertex_handle(_mesh->data(currentVertex).pred);
+        }
+
+        /*
         // point de départ et point d'arrivée en vert et en gros
         _mesh->set_color(vh1, MyMesh::Color(0, 255, 0));
         _mesh->data(vh1).thickness = 9;
         _mesh->set_color(vh2, MyMesh::Color(0, 255, 0));
         _mesh->data(vh2).thickness = 9;
-
-        VertexHandle currentVertex = vh2;
-        VertexHandle previousVertex = currentVertex;
-        currentVertex = _mesh->vertex_handle(_mesh->data(currentVertex).pred);
-        if(currentVertex != vh1){
-            for (MyMesh::VertexEdgeIter edgeTmp1= _mesh->ve_iter(currentVertex);edgeTmp1.is_valid();++edgeTmp1) {
-                for (MyMesh::VertexEdgeIter edgeTmp2= _mesh->ve_iter(previousVertex);edgeTmp2.is_valid();++edgeTmp2) {
-                    if((*edgeTmp1).idx() == (*edgeTmp2).idx()){
-                        _mesh->set_color(edgeTmp1, MyMesh::Color(0, 200, 200));
-                        _mesh->data(edgeTmp1).thickness = 3;
-                    }
-                }
-            }
-        }
-        while(currentVertex != vh1){
-            _mesh->set_color(currentVertex, MyMesh::Color(0, 255, 255));
-            _mesh->data(currentVertex).thickness = 5;
-            previousVertex = currentVertex;
-            currentVertex = _mesh->vertex_handle(_mesh->data(currentVertex).pred);
-
-            for (MyMesh::VertexEdgeIter edgeTmp1= _mesh->ve_iter(currentVertex);edgeTmp1.is_valid();++edgeTmp1) {
-                for (MyMesh::VertexEdgeIter edgeTmp2= _mesh->ve_iter(previousVertex);edgeTmp2.is_valid();++edgeTmp2) {
-                    if((*edgeTmp1).idx() == (*edgeTmp2).idx()){
-                        _mesh->set_color(edgeTmp1, MyMesh::Color(0, 200, 200));
-                        _mesh->data(edgeTmp1).thickness = 3;
-                    }
-                }
-            }
-        }
+        */
     }
-
-
-
 
     // on affiche le nouveau maillage
     displayMesh(_mesh);
@@ -446,7 +470,7 @@ void MainWindow::on_pushButton_afficherChemin_clicked()
     int indexV1 = ui->spinBox_v1_chemin->value();
     int indexV2 = ui->spinBox_v2_chemin->value();
 
-    showPath(&mesh, indexV1, indexV2);
+    showPath(&mesh);
 }
 
 
@@ -649,12 +673,12 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_spinBox_v1_chemin_valueChanged(int arg1)
 {
-    vertex1=arg1;
+    face1=arg1;
     showSelections(&mesh);
 }
 
 void MainWindow::on_spinBox_v2_chemin_valueChanged(int arg1)
 {
-    vertex2=arg1;
+    face2=arg1;
     showSelections(&mesh);
 }
