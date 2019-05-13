@@ -123,6 +123,40 @@ void MeshViewerWidget::loadLines(GLfloat* verts, GLfloat* colors, int nVerts, GL
     updateGL();
 }
 
+void MeshViewerWidget::loadPath(GLfloat* verts, GLfloat* colors, int nVerts, GLuint* lines, int nLines, QList<QPair<float, int> > es)
+{
+    GLfloat* pathColsArray = new GLfloat[nVerts * 2];
+
+    for(int i = 0; i < nVerts; i = i + 3)
+    {
+        int j = 2 * i;
+        pathColsArray[j] = colors[i] / 255.0;
+        pathColsArray[j+1] = colors[i+1] / 255.0;
+        pathColsArray[j+2] = colors[i+2] / 255.0;
+
+        pathColsArray[j+3] = verts[i];
+        pathColsArray[j+4] = verts[i+1];
+        pathColsArray[j+5] = verts[i+2];
+    }
+
+    glGenBuffers( 2, PathDataBuffers );
+
+
+    glBindBuffer(GL_ARRAY_BUFFER, PathDataBuffers[0]);
+    glBufferData(GL_ARRAY_BUFFER, nVerts * 2 * sizeof(GLfloat), pathColsArray, GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, PathDataBuffers[1]);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, nLines * sizeof(GLuint), lines, GL_STATIC_DRAW);
+
+    pathToDraw = nLines;
+
+    pathSizes = es;
+
+    delete[] pathColsArray;
+
+    updateGL();
+}
+
 void MeshViewerWidget::loadPoints(GLfloat* verts, GLfloat* colors, int nVerts, GLuint* points, int nPoints, QList<QPair<float, int> > vs)
 {
     GLfloat* pointsColsArray = new GLfloat[nVerts * 2];

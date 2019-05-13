@@ -49,6 +49,7 @@ public:
     void loadMesh(GLfloat* verts, GLfloat* colors, int nVerts, GLuint* triangles, int nTriangles);
     void loadLines(GLfloat* verts, GLfloat* colors, int nVerts, GLuint* lines, int nLines, QList<QPair<float, int> > es);
     void loadPoints(GLfloat* verts, GLfloat* colors, int nVerts, GLuint* points, int nPoints, QList<QPair<float, int> > vs);
+    void loadPath(GLfloat* verts, GLfloat* colors, int nVerts, GLuint* lines, int nLines, QList<QPair<float, int> > es);
 
     // buffer pour les VBO
     GLuint TriDataBuffers[2];
@@ -58,6 +59,10 @@ public:
     GLuint LinesDataBuffers[2];
     int linesToDraw;
     QList<QPair<float, int> > edgeSizes;
+
+    GLuint PathDataBuffers[2];
+    int pathToDraw;
+    QList<QPair<float, int> > pathSizes;
 
     GLuint PointsDataBuffers[2];
     int pointsToDraw;

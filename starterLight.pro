@@ -41,11 +41,27 @@ macx: {
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    meshviewerwidget.cpp
+    meshviewerwidget.cpp \
+    ChenHanImproved/BaseModel.cpp \
+    ChenHanImproved/ExactMethodForDGP.cpp \
+    ChenHanImproved/ImprovedCHWithFilteringRule.cpp \
+    ChenHanImproved/Point3D.cpp \
+    ChenHanImproved/PreviousCH.cpp \
+    ChenHanImproved/RichModel.cpp \
+    ChenHanImproved/stdafx.cpp \
+    ChenHanImproved/XinWangImprovedCH.cpp
 
 HEADERS += \
         mainwindow.h \
-    meshviewerwidget.h
+    meshviewerwidget.h \
+    ChenHanImproved/BaseModel.h \
+    ChenHanImproved/ExactMethodForDGP.h \
+    ChenHanImproved/ImprovedCHWithFilteringRule.h \
+    ChenHanImproved/Point3D.h \
+    ChenHanImproved/PreviousCH.h \
+    ChenHanImproved/RichModel.h \
+    ChenHanImproved/stdafx.h \
+    ChenHanImproved/XinWangImprovedCH.h
 
 FORMS += \
         mainwindow.ui

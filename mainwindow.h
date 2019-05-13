@@ -5,6 +5,7 @@
 #include <QMainWindow>
 #include <OpenMesh/Core/IO/MeshIO.hh>
 #include <OpenMesh/Core/Mesh/TriMesh_ArrayKernelT.hh>
+#include "ChenHanImproved/RichModel.h"
 #include <math.h>
 
 namespace Ui {
@@ -52,6 +53,7 @@ public:
     int Dijkstra (MyMesh* _mesh, int faceStart, int faceEnd);
 
     void displayMesh(MyMesh *_mesh);
+    void displayPath(vector<CPoint3D> resultpoints);
     void resetAllColorsAndThickness(MyMesh* _mesh);
 
 private slots:
@@ -84,6 +86,8 @@ private:
     float finalDist;
     int finalPred;
     MyMesh::Point pointStart, pointEnd;
+
+    CRichModel *model;
 
 
     Ui::MainWindow *ui;

@@ -1,5 +1,12 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "ChenHanImproved/BaseModel.h"
+#include "ChenHanImproved/RichModel.h"
+#include "ChenHanImproved/ExactMethodForDGP.h"
+#include "ChenHanImproved/PreviousCH.h"
+#include "ChenHanImproved/ImprovedCHWithFilteringRule.h"
+#include "ChenHanImproved/XinWangImprovedCH.h"
+#include <QDebug>
 
 /* **** début de la partie à compléter **** */
 /*
@@ -346,12 +353,27 @@ void MainWindow::showPath(MyMesh* _mesh)
         _mesh->set_color(vh1, MyMesh::Color(0, 255, 0));
         _mesh->data(vh1).thickness = 9;
         _mesh->set_color(vh2, MyMesh::Color(0, 255, 0));
-        _mesh->data(vh2).thickness = 9;
-        */
-    }
+        _mesh->data(vh2).thickness = 9;*/
 
+    }
     // on affiche le nouveau maillage
     displayMesh(_mesh);
+
+    // Debut utilisation CHI
+    /*CExactMethodForDGP * algorithm = new CXinWangImprovedCH(*model, face1);
+    algorithm->Execute();
+    vector<CPoint3D> resultpoints;
+    if (!(face2 < 0 || face2 >=  model->GetNumOfVerts()))
+    {
+        algorithm->BackTrace(face2, resultpoints);
+        for (int i = resultpoints.size() -1; i >=0; --i)
+        {
+            qDebug() << "(" << resultpoints[i].x << ", " << resultpoints[i].y << ", " << resultpoints[i].z << ")";
+        }
+    }
+    // Fin utilisation CHI
+    // Affichage chemin obtenu avec CHI, a faire apres displayMesh
+    displayPath(resultpoints);*/
 }
 
 /* **** fin de la partie à compléter **** */
@@ -362,7 +384,7 @@ void MainWindow::showPath(MyMesh* _mesh)
 void MainWindow::on_pushButton_bordure_clicked()
 {
     showBorder(&mesh);
-}*/
+}
 
 //void MainWindow::on_pushButton_voisinage_clicked()
 //{
@@ -462,7 +484,7 @@ void MainWindow::on_pushButton_bordure_clicked()
 //        showSelections(&mesh);
 //    else
 //        showSelectionsNeighborhood(&mesh);
-//}
+//}*/
 
 void MainWindow::on_pushButton_afficherChemin_clicked()
 {
@@ -484,6 +506,27 @@ void MainWindow::on_pushButton_chargement_clicked()
 
     // initialisation des couleurs et épaisseurs (sommets et arêtes) du mesh
     resetAllColorsAndThickness(&mesh);
+
+    /*
+    // Debut ouverture du modele avec CHI
+    model = new CRichModel(fileName.toUtf8().data());
+    qDebug() <<"----------------------model info begin----------------\n";
+    qDebug() << "File name:\t" << model->GetFileName().data() << endl;
+    try
+    {
+        model->LoadModel();
+    }
+    catch(const char* msg)
+    {
+        qDebug() << "ERRORS happen!\n" << msg;
+    }
+    model->Preprocess();
+    if (!model->HasBeenLoad() || !model->HasBeenProcessed())
+    {
+        qDebug() << "The model fails to be handled.";
+    }
+    // Fin ouverture du modele avec CHI
+    */
 
     // on affiche le maillage
     displayMesh(&mesh);
@@ -651,6 +694,110 @@ void MainWindow::displayMesh(MyMesh* _mesh)
     delete[] pointsIndiceArray;
     delete[] pointsCols;
     delete[] pointsVerts;
+}
+
+// charge un chemin geodesique dans l'environnement OpenGL
+void MainWindow::displayPath(vector<CPoint3D> resultpoints)
+{
+    GLuint* triIndiceArray = new GLuint[resultpoints.size() * 3];
+    GLfloat* triCols = new GLfloat[resultpoints.size() * 3 * 3];
+    GLfloat* triVerts = new GLfloat[resultpoints.size() * 3 * 3];
+
+    QList<QPair<float, int> > vertsSizes;
+    int i = 0;
+    for (; i < resultpoints.size() ; ++i)
+    {
+        triCols[3*i+0] = 200; triCols[3*i+1] = 0; triCols[3*i+2] = 0;
+        triVerts[3*i+0] = resultpoints[i].x; triVerts[3*i+1] = resultpoints[i].y; triVerts[3*i+2] = resultpoints[i].z;
+        triIndiceArray[i] = i;
+        vertsSizes.append(qMakePair(10, i));
+    }
+
+    ui->displayWidget->loadPoints(triVerts, triCols, i * 3, triIndiceArray, i, vertsSizes);
+
+    delete[] triIndiceArray;
+    delete[] triCols;
+    delete[] triVerts;
+
+    GLuint* linesIndiceArray = new GLuint[resultpoints.size() * 2];
+    GLfloat* linesCols = new GLfloat[resultpoints.size() * 2 * 3];
+    GLfloat* linesVerts = new GLfloat[resultpoints.size() * 2 * 3];
+
+    QList<QPair<float, int> > edgeSizes;
+    i = 0;
+    for (; i < resultpoints.size() - 1 ;)
+    {
+        linesVerts[3*i+0] = resultpoints[i].x;
+        linesVerts[3*i+1] = resultpoints[i].y;
+        linesVerts[3*i+2] = resultpoints[i].z;
+        linesCols[3*i+0] = 200;
+        linesCols[3*i+1] = 100;
+        linesCols[3*i+2] = 100;
+        linesIndiceArray[i] = i;
+        edgeSizes.append(qMakePair(10, i));
+        i++;
+
+        linesVerts[3*i+0] = resultpoints[i].x;
+        linesVerts[3*i+1] = resultpoints[i].y;
+        linesVerts[3*i+2] = resultpoints[i].z;
+        linesCols[3*i+0] = 200;
+        linesCols[3*i+1] = 100;
+        linesCols[3*i+2] = 100;
+        linesIndiceArray[i] = i;
+        edgeSizes.append(qMakePair(10, i));
+        i++;
+    }
+
+    ui->displayWidget->loadPath(linesVerts, linesCols, i * 3, linesIndiceArray, i, edgeSizes);
+
+    delete[] linesIndiceArray;
+    delete[] linesCols;
+    delete[] linesVerts;
+
+    /*GLuint* pointsIndiceArray = new GLuint[_mesh->n_vertices()];
+    GLfloat* pointsCols = new GLfloat[_mesh->n_vertices() * 3];
+    GLfloat* pointsVerts = new GLfloat[_mesh->n_vertices() * 3];
+
+    i = 0;
+    QHash<float, QList<int> > vertsIDbyThickness;
+    for (MyMesh::VertexIter vit = _mesh->vertices_begin(); vit != _mesh->vertices_end(); ++vit)
+    {
+        float t = _mesh->data(*vit).thickness;
+        if(t > 0)
+        {
+            if(!vertsIDbyThickness.contains(t))
+                vertsIDbyThickness[t] = QList<int>();
+            vertsIDbyThickness[t].append((*vit).idx());
+        }
+    }
+    QHashIterator<float, QList<int> > vitt(vertsIDbyThickness);
+    QList<QPair<float, int> > vertsSizes;
+
+    while (vitt.hasNext())
+    {
+        vitt.next();
+
+        for(int v = 0; v < vitt.value().size(); v++)
+        {
+            int vidx = vitt.value().at(v);
+
+            pointsVerts[3*i+0] = _mesh->point(_mesh->vertex_handle(vidx))[0];
+            pointsVerts[3*i+1] = _mesh->point(_mesh->vertex_handle(vidx))[1];
+            pointsVerts[3*i+2] = _mesh->point(_mesh->vertex_handle(vidx))[2];
+            pointsCols[3*i+0] = _mesh->color(_mesh->vertex_handle(vidx))[0];
+            pointsCols[3*i+1] = _mesh->color(_mesh->vertex_handle(vidx))[1];
+            pointsCols[3*i+2] = _mesh->color(_mesh->vertex_handle(vidx))[2];
+            pointsIndiceArray[i] = i;
+            i++;
+        }
+        vertsSizes.append(qMakePair(vitt.key(), vitt.value().size()));
+    }
+
+    ui->displayWidget->loadPoints(pointsVerts, pointsCols, i * 3, pointsIndiceArray, i, vertsSizes);
+
+    delete[] pointsIndiceArray;
+    delete[] pointsCols;
+    delete[] pointsVerts;*/
 }
 
 
