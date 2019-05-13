@@ -18,7 +18,7 @@
 #if !defined(AFX_OBJMODEL_H__138204A2_0445_4BA8_B76D_6E5374975C97__INCLUDED_)
 #define AFX_OBJMODEL_H__138204A2_0445_4BA8_B76D_6E5374975C97__INCLUDED_
 
-#include "Point3d.h"
+#include "Point3D.h"
 #include <fstream>
 using namespace std;
 class CBaseModel  
