@@ -17,6 +17,7 @@
 
 #include "stdafx.h"
 #include "RichModel.h"
+#include <QDebug>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -37,7 +38,7 @@ void CRichModel::CreateEdgesFromVertsAndFaces()
 {
 	m_Edges.reserve(2 * (GetNumOfVerts() + GetNumOfFaces() - 2));
 	map<pair<int, int>, int> pondOfUndeterminedEdges;
-	int szFaces = GetNumOfFaces();
+    int szFaces = GetNumOfFaces();
 	for (int i = 0; i < szFaces; ++i)
 	{		
 		int threeIndices[3];
@@ -52,11 +53,11 @@ void CRichModel::CreateEdgesFromVertsAndFaces()
 			map<pair<int, int>, int>::const_iterator it = pondOfUndeterminedEdges.find(make_pair(leftVert, rightVert));
 			if (it != pondOfUndeterminedEdges.end())
 			{
-				int posInEdgeList = it->second;
-				if (m_Edges[posInEdgeList].indexOfOppositeVert != -1)
+                int posInEdgeList = it->second;
+                if (m_Edges[posInEdgeList].indexOfOppositeVert != -1)
 				{
-					throw "Now we can't support repeated edges! But we will support this in the next version.";
-				}
+                    qDebug() << "Now we can't support repeated edges! But we will support this in the next version.";
+                }
 				threeIndices[j] = posInEdgeList;
 				m_Edges[posInEdgeList].indexOfOppositeVert = Face(i)[post];
 				m_Edges[posInEdgeList].indexOfFrontFace = i;				
@@ -86,7 +87,7 @@ void CRichModel::CreateEdgesFromVertsAndFaces()
 			m_Edges[threeIndices[j]].indexOfLeftEdge = Edge(threeIndices[(j + 2) % 3]).indexOfReverseEdge;
 			m_Edges[threeIndices[j]].indexOfRightEdge = Edge(threeIndices[(j + 1) % 3]).indexOfReverseEdge;
 		}
-	}
+    }
     vector<CEdge> testE(m_Edges);
     m_Edges.swap(testE);
 }
@@ -149,7 +150,7 @@ void CRichModel::CollectAndArrangeNeighs()
 		}
 		if (num != sequenceOfDegrees[i])
 		{
-			throw "Complex vertices";
+            qDebug() << "Complex vertices";
 		}
 	}
 }
@@ -205,21 +206,21 @@ void CRichModel::ComputePlanarCoordsOfIncidentVertForEdges()
 
 void CRichModel::Preprocess()
 {
-	if (fBePreprocessed)
-		return;	
+    if (fBePreprocessed)
+        return;
 	if (!m_fBeLoaded)
 	{
 		LoadModel();
-	}
+    }
 
 	if (!fLocked)
 	{
-		fLocked = true;
-		CreateEdgesFromVertsAndFaces();
-		CollectAndArrangeNeighs();	
-		ComputeNumOfHoles();
-		ComputeAnglesAroundVerts();
-		ComputePlanarCoordsOfIncidentVertForEdges();
+        fLocked = true;
+        CreateEdgesFromVertsAndFaces();
+        CollectAndArrangeNeighs();
+        ComputeNumOfHoles();
+        ComputeAnglesAroundVerts();
+        ComputePlanarCoordsOfIncidentVertForEdges();
 		fBePreprocessed = true;
 		fLocked = false; 
 	}
