@@ -164,12 +164,22 @@ void MainWindow::showSelections(MyMesh* _mesh){
         _mesh->set_color(fh, MyMesh::Color(0, 255, 0));
         MyMesh::FaceVertexIter fh_v = _mesh->fv_iter(fh);
         pointStart = MyMesh::Point(0);
+        unsigned iter = 0;
         for(; fh_v.is_valid(); ++fh_v)
         {
             VertexHandle vertexHandle = *fh_v;
-            pointStart += _mesh->point(vertexHandle);
+
+            switch (iter)
+            {
+                case 0:pointStart += _mesh->point(vertexHandle)*ui->slider_dx1->value()/100;break;
+                case 1:pointStart += _mesh->point(vertexHandle)*ui->slider_dy1->value()/100;break;
+                case 2:pointStart += _mesh->point(vertexHandle)*ui->slider_dz1->value()/100;break;
+                default:pointStart += _mesh->point(vertexHandle);
+            }
+            iter++;
         }
-        pointStart/=3;
+//        pointStart/=3;
+
         ui->spinbox_x1->setValue(pointStart[0]);
         ui->spinbox_y1->setValue(pointStart[1]);
         ui->spinbox_z1->setValue(pointStart[2]);
@@ -184,12 +194,21 @@ void MainWindow::showSelections(MyMesh* _mesh){
         _mesh->set_color(fh, MyMesh::Color(0, 255, 0));
         MyMesh::FaceVertexIter fh_v = _mesh->fv_iter(fh);
         pointEnd = MyMesh::Point(0);
+        unsigned iter = 0;
         for(; fh_v.is_valid(); ++fh_v)
         {
             VertexHandle vertexHandle = *fh_v;
-            pointEnd += _mesh->point(vertexHandle);
+            switch (iter)
+            {
+                case 0:pointEnd += _mesh->point(vertexHandle)*ui->slider_dx2->value()/100;break;
+                case 1:pointEnd += _mesh->point(vertexHandle)*ui->slider_dy2->value()/100;break;
+                case 2:pointEnd += _mesh->point(vertexHandle)*ui->slider_dz2->value()/100;break;
+                default:pointEnd += _mesh->point(vertexHandle);
+            }
+            iter++;
         }
-        pointEnd/=3;
+//        pointEnd/=3;
+
         ui->spinbox_x2->setValue(pointEnd[0]);
         ui->spinbox_y2->setValue(pointEnd[1]);
         ui->spinbox_z2->setValue(pointEnd[2]);
@@ -495,9 +514,26 @@ void MainWindow::on_pushButton_afficherChemin_clicked()
     showPath(&mesh);
 }
 
+void MainWindow::enableSliders(bool enable)
+{
+    ui->slider_dx1->setEnabled(enable);
+    ui->slider_dy1->setEnabled(enable);
+    ui->slider_dz1->setEnabled(enable);
+    ui->slider_dx2->setEnabled(enable);
+    ui->slider_dy2->setEnabled(enable);
+    ui->slider_dz2->setEnabled(enable);
+
+    ui->slider_dx1->setValue(33);
+    ui->slider_dy1->setValue(33);
+    ui->slider_dz1->setValue(33);
+    ui->slider_dx2->setValue(33);
+    ui->slider_dy2->setValue(33);
+    ui->slider_dz2->setValue(33);
+}
 
 void MainWindow::on_pushButton_chargement_clicked()
 {
+    enableSliders(false);
     // fenêtre de sélection des fichiers
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open Mesh"), "", tr("Mesh Files (*.obj)"));
 
@@ -506,6 +542,7 @@ void MainWindow::on_pushButton_chargement_clicked()
 
     // initialisation des couleurs et épaisseurs (sommets et arêtes) du mesh
     resetAllColorsAndThickness(&mesh);
+
 
     /*
     // Debut ouverture du modele avec CHI
@@ -530,6 +567,8 @@ void MainWindow::on_pushButton_chargement_clicked()
 
     // on affiche le maillage
     displayMesh(&mesh);
+    if (mesh.n_vertices() > 0)
+        enableSliders(true);
 }
 
 /* **** fin de la partie boutons et IHM **** */
@@ -810,6 +849,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     modevoisinage = false;
 
     ui->setupUi(this);
+    enableSliders(false);
 }
 
 MainWindow::~MainWindow()
@@ -828,4 +868,143 @@ void MainWindow::on_spinBox_v2_chemin_valueChanged(int arg1)
 {
     face2=arg1;
     showSelections(&mesh);
+}
+
+void MainWindow::on_slider_dx1_valueChanged(int arg1)
+{
+    if (!changingSlider)
+    {
+        changingSlider = true;
+        int x1 = arg1;
+        int y1 = ui->slider_dy1->value();
+        int z1 = ui->slider_dz1->value();
+
+        int partA = (y1+z1==0?1:y1+z1);
+        int partB = 100-x1;
+
+        y1 = y1*partB/partA;
+        z1 = z1*partB/partA;
+
+        ui->slider_dx1->setValue(x1);
+        ui->slider_dy1->setValue(y1);
+        ui->slider_dz1->setValue(z1);
+
+        changingSlider = false;
+        showSelections(&mesh);
+    }
+}
+void MainWindow::on_slider_dy1_valueChanged(int arg1)
+{
+    if (!changingSlider)
+    {
+        changingSlider = true;
+        int y1 = arg1;
+        int x1 = ui->slider_dx1->value();
+        int z1 = ui->slider_dz1->value();
+
+        int partA = (x1+z1==0?1:x1+z1);
+        int partB = 100-y1;
+
+        x1 = x1*partB/partA;
+        z1 = z1*partB/partA;
+
+        ui->slider_dx1->setValue(x1);
+        ui->slider_dy1->setValue(y1);
+        ui->slider_dz1->setValue(z1);
+
+        changingSlider = false;
+        showSelections(&mesh);
+    }
+}
+void MainWindow::on_slider_dz1_valueChanged(int arg1)
+{
+    if (!changingSlider)
+    {
+        changingSlider = true;
+        int z1 = arg1;
+        int y1 = ui->slider_dy1->value();
+        int x1 = ui->slider_dx1->value();
+
+        int partA = (y1+x1==0?1:y1+x1);
+        int partB = 100-z1;
+
+        y1 = y1*partB/partA;
+        x1 = x1*partB/partA;
+
+        ui->slider_dx1->setValue(x1);
+        ui->slider_dy1->setValue(y1);
+        ui->slider_dz1->setValue(z1);
+
+        changingSlider = false;
+        showSelections(&mesh);
+    }
+}
+void MainWindow::on_slider_dx2_valueChanged(int arg1)
+{
+    if (!changingSlider)
+    {
+        changingSlider = true;
+        int x2 = arg1;
+        int y2 = ui->slider_dy2->value();
+        int z2 = ui->slider_dz2->value();
+
+        int partA = (y2+z2==0?1:y2+z2);
+        int partB = 100-x2;
+
+        y2 = y2*partB/partA;
+        z2 = z2*partB/partA;
+
+        ui->slider_dx2->setValue(x2);
+        ui->slider_dy2->setValue(y2);
+        ui->slider_dz2->setValue(z2);
+
+        changingSlider = false;
+        showSelections(&mesh);
+    }
+}
+void MainWindow::on_slider_dy2_valueChanged(int arg1)
+{
+    if (!changingSlider)
+    {
+        changingSlider = true;
+        int y2 = arg1;
+        int x2 = ui->slider_dx2->value();
+        int z2 = ui->slider_dz2->value();
+
+        int partA = (x2+z2==0?1:x2+z2);
+        int partB = 100-y2;
+
+        x2 = x2*partB/partA;
+        z2 = z2*partB/partA;
+
+        ui->slider_dx2->setValue(x2);
+        ui->slider_dy2->setValue(y2);
+        ui->slider_dz2->setValue(z2);
+
+        changingSlider = false;
+        showSelections(&mesh);
+    }
+}
+void MainWindow::on_slider_dz2_valueChanged(int arg1)
+{
+    if (!changingSlider)
+    {
+        changingSlider = true;
+        int z2 = arg1;
+        int y2 = ui->slider_dy2->value();
+        int x2 = ui->slider_dx2->value();
+
+        int partA = (y2+x2==0?1:y2+x2);
+        int partB = 100-z2;
+
+        y2 = y2*partB/partA;
+        x2 = x2*partB/partA;
+
+        ui->slider_dx2->setValue(x2);
+        ui->slider_dy2->setValue(y2);
+        ui->slider_dz2->setValue(z2);
+
+        changingSlider = false;
+        showSelections(&mesh);
+    }
 }

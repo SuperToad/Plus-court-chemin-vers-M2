@@ -70,8 +70,15 @@ private slots:
 //    void on_pushButton_bordure_clicked();
 
     void on_spinBox_v1_chemin_valueChanged(int arg1);
-
     void on_spinBox_v2_chemin_valueChanged(int arg1);
+
+    void on_slider_dx1_valueChanged(int arg1);
+    void on_slider_dy1_valueChanged(int arg1);
+    void on_slider_dz1_valueChanged(int arg1);
+
+    void on_slider_dx2_valueChanged(int arg1);
+    void on_slider_dy2_valueChanged(int arg1);
+    void on_slider_dz2_valueChanged(int arg1);
 
 private:
 
@@ -88,7 +95,8 @@ private:
     MyMesh::Point pointStart, pointEnd;
 
     CRichModel *model;
-
+    void enableSliders(bool enable);
+    bool changingSlider = false;
 
     Ui::MainWindow *ui;
 };
