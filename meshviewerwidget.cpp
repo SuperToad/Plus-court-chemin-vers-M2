@@ -286,6 +286,40 @@ void MeshViewerWidget::paintGL()
         glDisableClientState( GL_COLOR_ARRAY );
         glDisableClientState( GL_VERTEX_ARRAY );
     }
+
+    // Affichage geodesique
+    if(pathToDraw != 0)
+    {
+        // on charge le buffer 0 : une liste de vertex [r, g, b, x, y, z] (6 float)
+        glBindBuffer(GL_ARRAY_BUFFER, PathDataBuffers[0]);
+
+        // on charge la partie [r, g, b]
+        glColorPointer( 3, GL_FLOAT, 6 * sizeof(float), 0 );
+        // on charge la partie [x, y, z]
+        glVertexPointer( 3, GL_FLOAT, 6 * sizeof(float), ((float*)NULL + (3)) );
+
+        // on charge le buffer 1 : une liste d'ID [v0, v1] (2 int)
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, PathDataBuffers[1]);
+
+        glEnableClientState( GL_VERTEX_ARRAY );
+        glEnableClientState( GL_COLOR_ARRAY );
+
+        int cur = 0;
+        for(int i = 0; i < pathSizes.count(); i++)
+        {
+            glLineWidth(pathSizes.at(i).first);
+            glDrawElements(GL_LINES, pathSizes.at(i).second*2, GL_UNSIGNED_INT, (GLvoid*)(sizeof(GLfloat) * cur));
+            cur = cur + pathSizes.at(i).second*2;
+        }
+
+        glDisableClientState( GL_COLOR_ARRAY );
+        glDisableClientState( GL_VERTEX_ARRAY );
+    }
+}
+
+void MeshViewerWidget::resetPath()
+{
+    pathToDraw = 0;
 }
 
 

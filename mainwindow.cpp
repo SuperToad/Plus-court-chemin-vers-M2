@@ -401,22 +401,9 @@ void MainWindow::showPathGeo(MyMesh* _mesh)
         _mesh->set_color(vh2, MyMesh::Color(0, 255, 0));
 
         VertexHandle currentVertex = _mesh->vertex_handle(finalPred);
-        //_mesh->set_color(currentVertex, MyMesh::Color(0, 255, 255));
-        //_mesh->data(currentVertex).thickness = 5;
         VertexHandle previousVertex = currentVertex;
         currentVertex = _mesh->vertex_handle(_mesh->data(currentVertex).pred);
         while(currentVertex != previousVertex){
-            /*_mesh->set_color(currentVertex, MyMesh::Color(0, 255, 255));
-            _mesh->data(currentVertex).thickness = 5;
-
-            for (MyMesh::VertexEdgeIter edgeTmp1= _mesh->ve_iter(currentVertex);edgeTmp1.is_valid();++edgeTmp1) {
-                for (MyMesh::VertexEdgeIter edgeTmp2= _mesh->ve_iter(previousVertex);edgeTmp2.is_valid();++edgeTmp2) {
-                    if((*edgeTmp1).idx() == (*edgeTmp2).idx()){
-                        _mesh->set_color(edgeTmp1, MyMesh::Color(0, 200, 200));
-                        _mesh->data(edgeTmp1).thickness = 3;
-                    }
-                }
-            }*/
             previousVertex = currentVertex;
             currentVertex = _mesh->vertex_handle(_mesh->data(currentVertex).pred);
         }
@@ -653,6 +640,8 @@ void MainWindow::resetAllColorsAndThickness(MyMesh* _mesh)
         _mesh->data(*curEdge).thickness = 1;
         _mesh->set_color(*curEdge, MyMesh::Color(0, 0, 0));
     }
+
+    ui->displayWidget->resetPath();
 }
 
 // charge un objet MyMesh dans l'environnement OpenGL
@@ -795,19 +784,33 @@ void MainWindow::displayMesh(MyMesh* _mesh)
 // charge un chemin geodesique dans l'environnement OpenGL
 void MainWindow::displayPath(vector<CPoint3D> resultpoints)
 {
-    GLuint* triIndiceArray = new GLuint[resultpoints.size() * 3];
-    GLfloat* triCols = new GLfloat[resultpoints.size() * 3 * 3];
-    GLfloat* triVerts = new GLfloat[resultpoints.size() * 3 * 3];
+    GLuint* triIndiceArray = new GLuint[(resultpoints.size()+2) * 3];
+    GLfloat* triCols = new GLfloat[(resultpoints.size()+2) * 3 * 3];
+    GLfloat* triVerts = new GLfloat[(resultpoints.size()+2) * 3 * 3];
 
     QList<QPair<float, int> > vertsSizes;
+    // Point de debut
     int i = 0;
-    for (; i < resultpoints.size() ; ++i)
+    triCols[3*i+0] = 0; triCols[3*i+1] = 255; triCols[3*i+2] = 255;
+    triVerts[3*i+0] = pointStart[0]; triVerts[3*i+1] = pointStart[1]; triVerts[3*i+2] = pointStart[2];
+    triIndiceArray[i] = i;
+    vertsSizes.append(qMakePair(15, i));
+    i++;
+    // Points de la geodesique
+    // On utilise "i-1" quand on est en decalage avec le tableau resultpoints
+    for (; i - 1 < resultpoints.size() ; ++i)
     {
-        triCols[3*i+0] = 200; triCols[3*i+1] = 0; triCols[3*i+2] = 0;
-        triVerts[3*i+0] = resultpoints[i].x; triVerts[3*i+1] = resultpoints[i].y; triVerts[3*i+2] = resultpoints[i].z;
+        triCols[3*i+0] = 0; triCols[3*i+1] = 255; triCols[3*i+2] = 255;
+        triVerts[3*i+0] = resultpoints[i-1].x; triVerts[3*i+1] = resultpoints[i-1].y; triVerts[3*i+2] = resultpoints[i-1].z;
         triIndiceArray[i] = i;
         vertsSizes.append(qMakePair(10, i));
     }
+    // Point de fin
+    triCols[3*i+0] = 0; triCols[3*i+1] = 255; triCols[3*i+2] = 255;
+    triVerts[3*i+0] = pointEnd[0]; triVerts[3*i+1] = pointEnd[1]; triVerts[3*i+2] = pointEnd[2];
+    triIndiceArray[i] = i;
+    vertsSizes.append(qMakePair(15, i));
+    i++;
 
     ui->displayWidget->loadPoints(triVerts, triCols, i * 3, triIndiceArray, i, vertsSizes);
 
@@ -815,34 +818,53 @@ void MainWindow::displayPath(vector<CPoint3D> resultpoints)
     delete[] triCols;
     delete[] triVerts;
 
-    GLuint* linesIndiceArray = new GLuint[resultpoints.size() * 2];
-    GLfloat* linesCols = new GLfloat[resultpoints.size() * 2 * 3];
-    GLfloat* linesVerts = new GLfloat[resultpoints.size() * 2 * 3];
+    GLuint* linesIndiceArray = new GLuint[(resultpoints.size()+2) * 2];
+    GLfloat* linesCols = new GLfloat[(resultpoints.size()+2) * 2 * 3];
+    GLfloat* linesVerts = new GLfloat[(resultpoints.size()+2) * 2 * 3];
 
     QList<QPair<float, int> > edgeSizes;
     i = 0;
-    for (; i < resultpoints.size() - 1 ;)
-    {
-        linesVerts[3*i+0] = resultpoints[i].x;
-        linesVerts[3*i+1] = resultpoints[i].y;
-        linesVerts[3*i+2] = resultpoints[i].z;
-        linesCols[3*i+0] = 200;
-        linesCols[3*i+1] = 100;
-        linesCols[3*i+2] = 100;
-        linesIndiceArray[i] = i;
-        edgeSizes.append(qMakePair(10, i));
-        i++;
+    int j = 0;
+    // arete de la face de debut
+    linesVerts[3*i+0] = pointStart[0]; linesVerts[3*i+1] = pointStart[1]; linesVerts[3*i+2] = pointStart[2];
+    linesCols[3*i+0] = 0; linesCols[3*i+1] = 200; linesCols[3*i+2] = 200;
+    linesIndiceArray[i] = i;
+    edgeSizes.append(qMakePair(3, i));
+    i++;
 
-        linesVerts[3*i+0] = resultpoints[i].x;
-        linesVerts[3*i+1] = resultpoints[i].y;
-        linesVerts[3*i+2] = resultpoints[i].z;
-        linesCols[3*i+0] = 200;
-        linesCols[3*i+1] = 100;
-        linesCols[3*i+2] = 100;
+    linesVerts[3*i+0] = resultpoints[j].x; linesVerts[3*i+1] = resultpoints[j].y; linesVerts[3*i+2] = resultpoints[j].z;
+    linesCols[3*i+0] = 0; linesCols[3*i+1] = 200; linesCols[3*i+2] = 200;
+    linesIndiceArray[i] = i;
+    edgeSizes.append(qMakePair(3, i));
+    i++;
+    // aretes intermediaires
+    while ( i < resultpoints.size()*2 - 1 )
+    {
+        linesVerts[3*i+0] = resultpoints[j].x; linesVerts[3*i+1] = resultpoints[j].y; linesVerts[3*i+2] = resultpoints[j].z;
+        linesCols[3*i+0] = 0; linesCols[3*i+1] = 200; linesCols[3*i+2] = 200;
         linesIndiceArray[i] = i;
-        edgeSizes.append(qMakePair(10, i));
+        edgeSizes.append(qMakePair(3, i));
+        i++;
+        j++;
+
+        linesVerts[3*i+0] = resultpoints[j].x; linesVerts[3*i+1] = resultpoints[j].y; linesVerts[3*i+2] = resultpoints[j].z;
+        linesCols[3*i+0] = 0; linesCols[3*i+1] = 200; linesCols[3*i+2] = 200;
+        linesIndiceArray[i] = i;
+        edgeSizes.append(qMakePair(3, i));
         i++;
     }
+    // arete de la face de fin
+    linesVerts[3*i+0] = resultpoints[j].x; linesVerts[3*i+1] = resultpoints[j].y; linesVerts[3*i+2] = resultpoints[j].z;
+    linesCols[3*i+0] = 0; linesCols[3*i+1] = 200; linesCols[3*i+2] = 200;
+    linesIndiceArray[i] = i;
+    edgeSizes.append(qMakePair(3, i));
+    i++;
+
+    linesVerts[3*i+0] = pointEnd[0]; linesVerts[3*i+1] = pointEnd[1]; linesVerts[3*i+2] = pointEnd[2];
+    linesCols[3*i+0] = 0; linesCols[3*i+1] = 200; linesCols[3*i+2] = 200;
+    linesIndiceArray[i] = i;
+    edgeSizes.append(qMakePair(3, i));
+    i++;
 
     ui->displayWidget->loadPath(linesVerts, linesCols, i * 3, linesIndiceArray, i, edgeSizes);
 

@@ -50,6 +50,7 @@ public:
     void loadLines(GLfloat* verts, GLfloat* colors, int nVerts, GLuint* lines, int nLines, QList<QPair<float, int> > es);
     void loadPoints(GLfloat* verts, GLfloat* colors, int nVerts, GLuint* points, int nPoints, QList<QPair<float, int> > vs);
     void loadPath(GLfloat* verts, GLfloat* colors, int nVerts, GLuint* lines, int nLines, QList<QPair<float, int> > es);
+    void resetPath();
 
     // buffer pour les VBO
     GLuint TriDataBuffers[2];
