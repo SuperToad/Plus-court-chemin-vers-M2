@@ -901,7 +901,14 @@
        <item>
         <widget class="QPushButton" name="pushButton_afficherChemin">
          <property name="text">
-          <string>Afficher le chemin</string>
+          <string>Afficher le chemin (Dijkstra)</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_afficherCheminGeo">
+         <property name="text">
+          <string>Afficher le chemin (Géodésique)</string>
          </property>
         </widget>
        </item>
@@ -932,7 +939,7 @@
      <x>0</x>
      <y>0</y>
      <width>645</width>
-     <height>22</height>
+     <height>15</height>
     </rect>
    </property>
   </widget>

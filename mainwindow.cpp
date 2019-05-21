@@ -378,21 +378,71 @@ void MainWindow::showPath(MyMesh* _mesh)
     // on affiche le nouveau maillage
     displayMesh(_mesh);
 
-    // Debut utilisation CHI
-    /*CExactMethodForDGP * algorithm = new CXinWangImprovedCH(*model, face1);
-    algorithm->Execute();
-    vector<CPoint3D> resultpoints;
-    if (!(face2 < 0 || face2 >=  model->GetNumOfVerts()))
-    {
-        algorithm->BackTrace(face2, resultpoints);
-        for (int i = resultpoints.size() -1; i >=0; --i)
-        {
-            qDebug() << "(" << resultpoints[i].x << ", " << resultpoints[i].y << ", " << resultpoints[i].z << ")";
-        }
+}
+void MainWindow::showPathGeo(MyMesh* _mesh)
+{
+    if(face1 < 0 || face1 >= _mesh->n_faces()){
+        qDebug() << "v1 out of bound !";
+        qDebug() << "max =" << _mesh->n_faces();
+        return;
+    }if( face2 < 0 || face2 >= _mesh->n_faces()){
+        qDebug() << "v2 out of bound !";
+        qDebug() << "max =" << _mesh->n_faces();
+        return;
     }
-    // Fin utilisation CHI
-    // Affichage chemin obtenu avec CHI, a faire apres displayMesh
-    displayPath(resultpoints);*/
+    resetAllColorsAndThickness(_mesh);
+
+    if(Dijkstra(_mesh, face1, face2) == 0){
+
+        //affichage des face à défaut des points
+        FaceHandle vh1 = _mesh->face_handle(face1);
+        FaceHandle vh2 = _mesh->face_handle(face2);
+        _mesh->set_color(vh1, MyMesh::Color(0, 255, 0));
+        _mesh->set_color(vh2, MyMesh::Color(0, 255, 0));
+
+        VertexHandle currentVertex = _mesh->vertex_handle(finalPred);
+        //_mesh->set_color(currentVertex, MyMesh::Color(0, 255, 255));
+        //_mesh->data(currentVertex).thickness = 5;
+        VertexHandle previousVertex = currentVertex;
+        currentVertex = _mesh->vertex_handle(_mesh->data(currentVertex).pred);
+        while(currentVertex != previousVertex){
+            /*_mesh->set_color(currentVertex, MyMesh::Color(0, 255, 255));
+            _mesh->data(currentVertex).thickness = 5;
+
+            for (MyMesh::VertexEdgeIter edgeTmp1= _mesh->ve_iter(currentVertex);edgeTmp1.is_valid();++edgeTmp1) {
+                for (MyMesh::VertexEdgeIter edgeTmp2= _mesh->ve_iter(previousVertex);edgeTmp2.is_valid();++edgeTmp2) {
+                    if((*edgeTmp1).idx() == (*edgeTmp2).idx()){
+                        _mesh->set_color(edgeTmp1, MyMesh::Color(0, 200, 200));
+                        _mesh->data(edgeTmp1).thickness = 3;
+                    }
+                }
+            }*/
+            previousVertex = currentVertex;
+            currentVertex = _mesh->vertex_handle(_mesh->data(currentVertex).pred);
+        }
+        int vertex1 = _mesh->vertex_handle(finalPred).idx();
+        int vertex2 = currentVertex.idx();
+
+        // on affiche le nouveau maillage
+        displayMesh(_mesh);
+
+        // Debut utilisation CHI
+        CExactMethodForDGP * algorithm = new CXinWangImprovedCH(*model, vertex1);
+        algorithm->Execute();
+        vector<CPoint3D> resultpoints;
+        if (!(vertex2 < 0 || vertex2 >=  model->GetNumOfVerts()))
+        {
+            algorithm->BackTrace(vertex2, resultpoints);
+            for (int i = resultpoints.size() -1; i >=0; --i)
+            {
+                qDebug() << "(" << resultpoints[i].x << ", " << resultpoints[i].y << ", " << resultpoints[i].z << ")";
+            }
+        }
+        // Fin utilisation CHI
+        // Affichage chemin obtenu avec CHI, a faire apres displayMesh
+        displayPath(resultpoints);
+    }
+
 }
 
 /* **** fin de la partie à compléter **** */
@@ -514,6 +564,15 @@ void MainWindow::on_pushButton_afficherChemin_clicked()
     showPath(&mesh);
 }
 
+void MainWindow::on_pushButton_afficherCheminGeo_clicked()
+{
+    // on récupère les sommets de départ et d'arrivée
+    int indexV1 = ui->spinBox_v1_chemin->value();
+    int indexV2 = ui->spinBox_v2_chemin->value();
+
+    showPathGeo(&mesh);
+}
+
 void MainWindow::enableSliders(bool enable)
 {
     ui->slider_dx1->setEnabled(enable);
@@ -544,7 +603,6 @@ void MainWindow::on_pushButton_chargement_clicked()
     resetAllColorsAndThickness(&mesh);
 
 
-    /*
     // Debut ouverture du modele avec CHI
     model = new CRichModel(fileName.toUtf8().data());
     qDebug() <<"----------------------model info begin----------------\n";
@@ -563,7 +621,6 @@ void MainWindow::on_pushButton_chargement_clicked()
         qDebug() << "The model fails to be handled.";
     }
     // Fin ouverture du modele avec CHI
-    */
 
     // on affiche le maillage
     displayMesh(&mesh);
@@ -793,50 +850,6 @@ void MainWindow::displayPath(vector<CPoint3D> resultpoints)
     delete[] linesCols;
     delete[] linesVerts;
 
-    /*GLuint* pointsIndiceArray = new GLuint[_mesh->n_vertices()];
-    GLfloat* pointsCols = new GLfloat[_mesh->n_vertices() * 3];
-    GLfloat* pointsVerts = new GLfloat[_mesh->n_vertices() * 3];
-
-    i = 0;
-    QHash<float, QList<int> > vertsIDbyThickness;
-    for (MyMesh::VertexIter vit = _mesh->vertices_begin(); vit != _mesh->vertices_end(); ++vit)
-    {
-        float t = _mesh->data(*vit).thickness;
-        if(t > 0)
-        {
-            if(!vertsIDbyThickness.contains(t))
-                vertsIDbyThickness[t] = QList<int>();
-            vertsIDbyThickness[t].append((*vit).idx());
-        }
-    }
-    QHashIterator<float, QList<int> > vitt(vertsIDbyThickness);
-    QList<QPair<float, int> > vertsSizes;
-
-    while (vitt.hasNext())
-    {
-        vitt.next();
-
-        for(int v = 0; v < vitt.value().size(); v++)
-        {
-            int vidx = vitt.value().at(v);
-
-            pointsVerts[3*i+0] = _mesh->point(_mesh->vertex_handle(vidx))[0];
-            pointsVerts[3*i+1] = _mesh->point(_mesh->vertex_handle(vidx))[1];
-            pointsVerts[3*i+2] = _mesh->point(_mesh->vertex_handle(vidx))[2];
-            pointsCols[3*i+0] = _mesh->color(_mesh->vertex_handle(vidx))[0];
-            pointsCols[3*i+1] = _mesh->color(_mesh->vertex_handle(vidx))[1];
-            pointsCols[3*i+2] = _mesh->color(_mesh->vertex_handle(vidx))[2];
-            pointsIndiceArray[i] = i;
-            i++;
-        }
-        vertsSizes.append(qMakePair(vitt.key(), vitt.value().size()));
-    }
-
-    ui->displayWidget->loadPoints(pointsVerts, pointsCols, i * 3, pointsIndiceArray, i, vertsSizes);
-
-    delete[] pointsIndiceArray;
-    delete[] pointsCols;
-    delete[] pointsVerts;*/
 }
 
 

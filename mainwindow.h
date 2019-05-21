@@ -44,6 +44,7 @@ public:
     void showSelections(MyMesh* _mesh);
     //void showSelectionsNeighborhood(MyMesh* _mesh);
     void showPath(MyMesh* _mesh);
+    void showPathGeo(MyMesh* _mesh);
     //void showBorder(MyMesh* _mesh);
 
     // Dijkstra
@@ -66,6 +67,7 @@ private slots:
 //    void on_pushButton_faceMoins_clicked();
 //    void on_pushButton_facePlus_clicked();
     void on_pushButton_afficherChemin_clicked();
+    void on_pushButton_afficherCheminGeo_clicked();
 //    void on_pushButton_voisinage_clicked();
 //    void on_pushButton_bordure_clicked();
 
