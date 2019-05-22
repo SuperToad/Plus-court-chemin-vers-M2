@@ -134,7 +134,7 @@ void CBaseModel::AdjustScaleAndComputeNormalsToVerts()
 	if (m_Verts.empty())
 		return;
     m_NormalsToVerts.resize(m_Verts.size(), CPoint3D(0, 0, 0));
-	CPoint3D center(0, 0, 0);
+    /*CPoint3D center(0, 0, 0);
 	double sumArea(0);
 	CPoint3D sumNormal(0, 0, 0);
 	double deta(0);
@@ -193,7 +193,7 @@ void CBaseModel::AdjustScaleAndComputeNormalsToVerts()
 		}
 	}
 
-	CPoint3D ptUp(m_Verts[0]);
+    CPoint3D ptUp(m_Verts[0]);
 	CPoint3D ptDown(m_Verts[0]);
 	for (int i = 1; i < GetNumOfVerts(); ++i)
 	{
@@ -211,14 +211,14 @@ void CBaseModel::AdjustScaleAndComputeNormalsToVerts()
 			ptDown.z = m_Verts[i].z;
 	}	
 
-	double maxEdgeLenOfBoundingBox = -1;
+    double maxEdgeLenOfBoundingBox = -1;
 	if (ptUp.x - ptDown.x > maxEdgeLenOfBoundingBox)
 		maxEdgeLenOfBoundingBox = ptUp.x - ptDown.x;
 	if (ptUp.y - ptDown.y > maxEdgeLenOfBoundingBox)
 		maxEdgeLenOfBoundingBox = ptUp.y - ptDown.y;
 	if (ptUp.z - ptDown.z > maxEdgeLenOfBoundingBox)
 		maxEdgeLenOfBoundingBox = ptUp.z - ptDown.z;
-    /*double scale = 2.0 / maxEdgeLenOfBoundingBox;
+    double scale = 2.0 / maxEdgeLenOfBoundingBox;
 	for (int i = 0; i < GetNumOfVerts(); ++i)
 	{
 		m_Verts[i] -= center;
