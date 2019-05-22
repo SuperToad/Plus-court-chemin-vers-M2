@@ -291,6 +291,7 @@ int MainWindow::Dijkstra (MyMesh* _mesh, int faceStart, int faceEnd)
 
     int currentVertex=trouveMin(_mesh);
     finalDist=-1;
+    finalPred=-1;
     //fin initialisation
 
 
@@ -301,8 +302,11 @@ int MainWindow::Dijkstra (MyMesh* _mesh, int faceStart, int faceEnd)
         currentVertex = trouveMin(_mesh);
 
         if(currentVertex == -1){
-            qDebug() << "pas de chemin trouvé" ;
-            return -1;
+            if(finalDist==-1){
+                qDebug() << "pas de chemin trouvé" ;
+                return -1;
+            }
+            return 0;
         }
     }
     return 0;
