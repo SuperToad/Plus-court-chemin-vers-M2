@@ -325,7 +325,7 @@ void MainWindow::showPath(MyMesh* _mesh)
     }
 
     if(Dijkstra(_mesh, face1, face2) == 0){
-        qDebug() << "distance :" << finalDist;
+        qDebug() << "Distance avec Dijkstra :" << finalDist;
         for (MyMesh::VertexIter v_it=_mesh->vertices_sbegin(); v_it!=_mesh->vertices_end(); ++v_it)
         {
             if(_mesh->data(*v_it).checked == true){
@@ -424,16 +424,39 @@ void MainWindow::showPathGeo(MyMesh* _mesh)
         if (!(vertex2 < 0 || vertex2 >=  model->GetNumOfVerts()))
         {
             algorithm->BackTrace(vertex2, resultpoints);
-            for (int i = resultpoints.size() -1; i >=0; --i)
+            /*for (int i = resultpoints.size() -1; i >=0; --i)
             {
                 qDebug() << "(" << resultpoints[i].x << ", " << resultpoints[i].y << ", " << resultpoints[i].z << ")";
-            }
+            }*/
         }
         // Fin utilisation CHI
+        qDebug() << "Distance avec geodesique : " << calculDistances(resultpoints);
         // Affichage chemin obtenu avec CHI, a faire apres displayMesh
         displayPath(resultpoints);
     }
 
+}
+
+float MainWindow::calculDistances(vector<CPoint3D> resultpoints)
+{
+    float result = 0.0f;
+    float dx = pointStart[0] - resultpoints[0].x;
+    float dy = pointStart[1] - resultpoints[0].y;
+    float dz = pointStart[2] - resultpoints[0].z;
+    result += sqrt( dx*dx + dy*dy + dz*dz );
+    for (int i = 0; i < resultpoints.size() - 1; i++)
+    {
+        dx = resultpoints[i].x - resultpoints[i + 1].x;
+        dy = resultpoints[i].y - resultpoints[i + 1].y;
+        dz = resultpoints[i].z - resultpoints[i + 1].z;
+        result += sqrt( dx*dx + dy*dy + dz*dz );
+    }
+    dx = resultpoints[resultpoints.size() - 1].x - pointEnd[0];
+    dy = resultpoints[resultpoints.size() - 1].y - pointEnd[1];
+    dz = resultpoints[resultpoints.size() - 1].z - pointEnd[2];
+    result += sqrt( dx*dx + dy*dy + dz*dz );
+
+    return result;
 }
 
 /* **** fin de la partie à compléter **** */

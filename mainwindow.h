@@ -50,6 +50,7 @@ public:
     // Dijkstra
     int trouveMin(MyMesh* _mesh);
     float calculDistances(MyMesh::Point p1, MyMesh::Point p2);
+    float calculDistances(vector<CPoint3D> resultpoints);
     void majDistances(MyMesh* _mesh, int v);
     int Dijkstra (MyMesh* _mesh, int faceStart, int faceEnd);
 
