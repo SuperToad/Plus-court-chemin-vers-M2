@@ -55,6 +55,8 @@ public:
 
     void displayMesh(MyMesh *_mesh);
     void displayPath(vector<CPoint3D> resultpoints);
+    void displayStartFacePoint();
+    void displayEndFacePoint();
     void resetAllColorsAndThickness(MyMesh* _mesh);
 
 private slots:

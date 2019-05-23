@@ -5,6 +5,8 @@ MeshViewerWidget::MeshViewerWidget(QWidget*_parent) : QGLWidget(_parent)
     triToDraw = 0;
     linesToDraw = 0;
     pointsToDraw = 0;
+    startFacePointToDraw = 0;
+    endFacePointToDraw = 0;
 
     setMouseTracking(true);
     setFocus();
@@ -191,6 +193,76 @@ void MeshViewerWidget::loadPoints(GLfloat* verts, GLfloat* colors, int nVerts, G
     updateGL();
 }
 
+void MeshViewerWidget::loadStartFacePoint(GLfloat* verts, GLfloat* colors, int nVerts, GLuint* points, int nPoints, QList<QPair<float, int> > vs)
+{
+    GLfloat* facePointsColsArray = new GLfloat[nVerts * 2];
+
+    for(int i = 0; i < nVerts; i = i + 3)
+    {
+        int j = 2 * i;
+        facePointsColsArray[j] = colors[i] / 255.0;
+        facePointsColsArray[j+1] = colors[i+1] / 255.0;
+        facePointsColsArray[j+2] = colors[i+2] / 255.0;
+
+        facePointsColsArray[j+3] = verts[i];
+        facePointsColsArray[j+4] = verts[i+1];
+        facePointsColsArray[j+5] = verts[i+2];
+        //qDebug() << facePointsColsArray[j+3] << " " << facePointsColsArray[j+4] << " " << facePointsColsArray[j+5];
+    }
+
+    glGenBuffers( 2, StartFacePointDataBuffers );
+
+
+    glBindBuffer(GL_ARRAY_BUFFER, StartFacePointDataBuffers[0]);
+    glBufferData(GL_ARRAY_BUFFER, nVerts * 2 * sizeof(GLfloat), facePointsColsArray, GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, StartFacePointDataBuffers[1]);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, nPoints * sizeof(GLuint), points, GL_STATIC_DRAW);
+
+    startFacePointToDraw = nPoints;
+
+    startFaceVertsSizes = vs;
+
+    delete[] facePointsColsArray;
+
+    updateGL();
+}
+
+void MeshViewerWidget::loadEndFacePoint(GLfloat* verts, GLfloat* colors, int nVerts, GLuint* points, int nPoints, QList<QPair<float, int> > vs)
+{
+    GLfloat* facePointsColsArray = new GLfloat[nVerts * 2];
+
+    for(int i = 0; i < nVerts; i = i + 3)
+    {
+        int j = 2 * i;
+        facePointsColsArray[j] = colors[i] / 255.0;
+        facePointsColsArray[j+1] = colors[i+1] / 255.0;
+        facePointsColsArray[j+2] = colors[i+2] / 255.0;
+
+        facePointsColsArray[j+3] = verts[i];
+        facePointsColsArray[j+4] = verts[i+1];
+        facePointsColsArray[j+5] = verts[i+2];
+        //qDebug() << facePointsColsArray[j+3] << " " << facePointsColsArray[j+4] << " " << facePointsColsArray[j+5];
+    }
+
+    glGenBuffers( 2, EndFacePointDataBuffers );
+
+
+    glBindBuffer(GL_ARRAY_BUFFER, EndFacePointDataBuffers[0]);
+    glBufferData(GL_ARRAY_BUFFER, nVerts * 2 * sizeof(GLfloat), facePointsColsArray, GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EndFacePointDataBuffers[1]);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, nPoints * sizeof(GLuint), points, GL_STATIC_DRAW);
+
+    endFacePointToDraw = nPoints;
+
+    endFaceVertsSizes = vs;
+
+    delete[] facePointsColsArray;
+
+    updateGL();
+}
+
 
 void MeshViewerWidget::paintGL()
 {
@@ -281,6 +353,62 @@ void MeshViewerWidget::paintGL()
             glPointSize(vertsSizes.at(i).first);
             glDrawElements(GL_POINTS, vertsSizes.at(i).second, GL_UNSIGNED_INT, (GLvoid*)(sizeof(GLfloat) * cur));
             cur = cur + vertsSizes.at(i).second;
+        }
+
+        glDisableClientState( GL_COLOR_ARRAY );
+        glDisableClientState( GL_VERTEX_ARRAY );
+    }
+
+    // Affichage points sur les faces d'entrees et de sortie
+    if(startFacePointToDraw != 0)
+    {
+        // on charge le buffer 0 : une liste de vertex [r, g, b, x, y, z] (6 float)
+        glBindBuffer(GL_ARRAY_BUFFER, StartFacePointDataBuffers[0]);
+
+        // on charge la partie [r, g, b]
+        glColorPointer( 3, GL_FLOAT, 6 * sizeof(float), 0 );
+        // on charge la partie [x, y, z]
+        glVertexPointer( 3, GL_FLOAT, 6 * sizeof(float), ((float*)NULL + (3)) );
+
+        // on charge le buffer 1 : une liste d'ID [v0] (1 int)
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, StartFacePointDataBuffers[1]);
+
+        glEnableClientState( GL_VERTEX_ARRAY );
+        glEnableClientState( GL_COLOR_ARRAY );
+
+        int cur = 0;
+        for(int i = 0; i < startFaceVertsSizes.count(); i++)
+        {
+            glPointSize(startFaceVertsSizes.at(i).first);
+            glDrawElements(GL_POINTS, startFaceVertsSizes.at(i).second, GL_UNSIGNED_INT, (GLvoid*)(sizeof(GLfloat) * cur));
+            cur = cur + startFaceVertsSizes.at(i).second;
+        }
+
+        glDisableClientState( GL_COLOR_ARRAY );
+        glDisableClientState( GL_VERTEX_ARRAY );
+    }
+    if(endFacePointToDraw != 0)
+    {
+        // on charge le buffer 0 : une liste de vertex [r, g, b, x, y, z] (6 float)
+        glBindBuffer(GL_ARRAY_BUFFER, EndFacePointDataBuffers[0]);
+
+        // on charge la partie [r, g, b]
+        glColorPointer( 3, GL_FLOAT, 6 * sizeof(float), 0 );
+        // on charge la partie [x, y, z]
+        glVertexPointer( 3, GL_FLOAT, 6 * sizeof(float), ((float*)NULL + (3)) );
+
+        // on charge le buffer 1 : une liste d'ID [v0] (1 int)
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EndFacePointDataBuffers[1]);
+
+        glEnableClientState( GL_VERTEX_ARRAY );
+        glEnableClientState( GL_COLOR_ARRAY );
+
+        int cur = 0;
+        for(int i = 0; i < endFaceVertsSizes.count(); i++)
+        {
+            glPointSize(endFaceVertsSizes.at(i).first);
+            glDrawElements(GL_POINTS, endFaceVertsSizes.at(i).second, GL_UNSIGNED_INT, (GLvoid*)(sizeof(GLfloat) * cur));
+            cur = cur + endFaceVertsSizes.at(i).second;
         }
 
         glDisableClientState( GL_COLOR_ARRAY );

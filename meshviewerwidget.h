@@ -49,6 +49,8 @@ public:
     void loadMesh(GLfloat* verts, GLfloat* colors, int nVerts, GLuint* triangles, int nTriangles);
     void loadLines(GLfloat* verts, GLfloat* colors, int nVerts, GLuint* lines, int nLines, QList<QPair<float, int> > es);
     void loadPoints(GLfloat* verts, GLfloat* colors, int nVerts, GLuint* points, int nPoints, QList<QPair<float, int> > vs);
+    void loadStartFacePoint(GLfloat* verts, GLfloat* colors, int nVerts, GLuint* points, int nPoints, QList<QPair<float, int> > vs);
+    void loadEndFacePoint(GLfloat* verts, GLfloat* colors, int nVerts, GLuint* points, int nPoints, QList<QPair<float, int> > vs);
     void loadPath(GLfloat* verts, GLfloat* colors, int nVerts, GLuint* lines, int nLines, QList<QPair<float, int> > es);
     void resetPath();
 
@@ -68,6 +70,14 @@ public:
     GLuint PointsDataBuffers[2];
     int pointsToDraw;
     QList<QPair<float, int> > vertsSizes;
+
+    GLuint StartFacePointDataBuffers[2];
+    int startFacePointToDraw;
+    QList<QPair<float, int> > startFaceVertsSizes;
+
+    GLuint EndFacePointDataBuffers[2];
+    int endFacePointToDraw;
+    QList<QPair<float, int> > endFaceVertsSizes;
 
     // pour savoir si les buffer sont init
     bool init;

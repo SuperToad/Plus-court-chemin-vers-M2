@@ -783,6 +783,10 @@ void MainWindow::displayMesh(MyMesh* _mesh)
     delete[] pointsIndiceArray;
     delete[] pointsCols;
     delete[] pointsVerts;
+
+    // Affichage points sur la face
+    displayStartFacePoint();
+    displayEndFacePoint();
 }
 
 // charge un chemin geodesique dans l'environnement OpenGL
@@ -875,6 +879,58 @@ void MainWindow::displayPath(vector<CPoint3D> resultpoints)
     delete[] linesIndiceArray;
     delete[] linesCols;
     delete[] linesVerts;
+
+}
+
+// charge un chemin geodesique dans l'environnement OpenGL
+void MainWindow::displayStartFacePoint()
+{
+    GLuint* triIndiceArray = new GLuint[2];
+    GLfloat* triCols = new GLfloat[2* 3];
+    GLfloat* triVerts = new GLfloat[2 * 3];
+
+    QList<QPair<float, int> > vertsSizes;
+    // Point de debut
+    triCols[0] = 255;               triCols[1] = 0;                 triCols[2] = 0;
+    triVerts[0] = pointStart[0];    triVerts[1] = pointStart[1];    triVerts[2] = pointStart[2];
+    triIndiceArray[0] = 0;
+    vertsSizes.append(qMakePair(10, 0));
+    // Point de fin
+    triCols[3] = 255;               triCols[4] = 0;                 triCols[5] = 0;
+    triVerts[3] = pointEnd[0];      triVerts[4] = pointEnd[1];      triVerts[5] = pointEnd[2];
+    triIndiceArray[1] = 1;
+    vertsSizes.append(qMakePair(10, 1));
+
+    ui->displayWidget->loadStartFacePoint(triVerts, triCols, 6, triIndiceArray, 2, vertsSizes);
+
+    delete[] triIndiceArray;
+    delete[] triCols;
+    delete[] triVerts;
+
+}
+void MainWindow::displayEndFacePoint()
+{
+    GLuint* triIndiceArray = new GLuint[2];
+    GLfloat* triCols = new GLfloat[2* 3];
+    GLfloat* triVerts = new GLfloat[2 * 3];
+
+    QList<QPair<float, int> > vertsSizes;
+    // Point de fin
+    triCols[0] = 255;             triCols[1] = 0;               triCols[2] = 0;
+    triVerts[0] = pointEnd[0];    triVerts[1] = pointEnd[1];    triVerts[2] = pointEnd[2];
+    triIndiceArray[0] = 0;
+    vertsSizes.append(qMakePair(10, 0));
+    // Point de fin
+    triCols[3] = 255;               triCols[4] = 0;                 triCols[5] = 0;
+    triVerts[3] = pointEnd[0];      triVerts[4] = pointEnd[1];      triVerts[5] = pointEnd[2];
+    triIndiceArray[1] = 1;
+    vertsSizes.append(qMakePair(10, 1));
+
+    ui->displayWidget->loadEndFacePoint(triVerts, triCols, 6, triIndiceArray, 2, vertsSizes);
+
+    delete[] triIndiceArray;
+    delete[] triCols;
+    delete[] triVerts;
 
 }
 
