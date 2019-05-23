@@ -59,342 +59,107 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="label_10">
+        <widget class="QLabel" name="label_9">
          <property name="text">
-          <string>Sélection par coordonnées</string>
+          <string>Sélection par face</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QFrame" name="frame_coordonnees">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>20</height>
-          </size>
-         </property>
+        <widget class="QFrame" name="frame_2">
          <property name="frameShape">
-          <enum>QFrame::NoFrame</enum>
+          <enum>QFrame::StyledPanel</enum>
          </property>
-         <layout class="QHBoxLayout" name="horizontalLayout_9">
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <property name="spacing">
+           <number>2</number>
+          </property>
+          <property name="leftMargin">
+           <number>1</number>
+          </property>
+          <property name="topMargin">
+           <number>2</number>
+          </property>
+          <property name="rightMargin">
+           <number>2</number>
+          </property>
+          <property name="bottomMargin">
+           <number>2</number>
+          </property>
           <item>
-           <widget class="QFrame" name="frame">
-            <property name="frameShape">
-             <enum>QFrame::StyledPanel</enum>
-            </property>
-            <property name="frameShadow">
-             <enum>QFrame::Raised</enum>
-            </property>
-            <layout class="QVBoxLayout" name="verticalLayout_2">
+           <widget class="QWidget" name="widget_5" native="true">
+            <layout class="QHBoxLayout" name="horizontalLayout_5">
              <property name="spacing">
               <number>1</number>
              </property>
              <property name="leftMargin">
-              <number>2</number>
+              <number>1</number>
              </property>
              <property name="topMargin">
-              <number>2</number>
+              <number>1</number>
              </property>
              <property name="rightMargin">
-              <number>2</number>
+              <number>1</number>
              </property>
              <property name="bottomMargin">
-              <number>2</number>
+              <number>1</number>
              </property>
              <item>
-              <widget class="QLabel" name="label_depart">
-               <property name="text">
-                <string>Point de départ</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QWidget" name="widget_x1" native="true">
-               <layout class="QHBoxLayout" name="horizontalLayout_2">
-                <property name="spacing">
-                 <number>1</number>
-                </property>
-                <property name="leftMargin">
-                 <number>2</number>
-                </property>
-                <property name="topMargin">
-                 <number>2</number>
-                </property>
-                <property name="rightMargin">
-                 <number>2</number>
-                </property>
-                <property name="bottomMargin">
-                 <number>2</number>
-                </property>
-                <item>
-                 <widget class="QLabel" name="label_x1">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="text">
-                   <string>x : </string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QDoubleSpinBox" name="spinbox_x1">
-                  <property name="decimals">
-                   <number>7</number>
-                  </property>
-                  <property name="minimum">
-                   <double>-99.989999999999995</double>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-             </item>
-             <item>
-              <widget class="QWidget" name="widget_y1" native="true">
+              <widget class="QLabel" name="label_v1_chemin">
                <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
-               <layout class="QHBoxLayout" name="horizontalLayout_3">
-                <property name="spacing">
-                 <number>1</number>
-                </property>
-                <property name="leftMargin">
-                 <number>2</number>
-                </property>
-                <property name="topMargin">
-                 <number>2</number>
-                </property>
-                <property name="rightMargin">
-                 <number>2</number>
-                </property>
-                <property name="bottomMargin">
-                 <number>2</number>
-                </property>
-                <item>
-                 <widget class="QLabel" name="label_y1">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="text">
-                   <string>y : </string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QDoubleSpinBox" name="spinbox_y1">
-                  <property name="decimals">
-                   <number>7</number>
-                  </property>
-                  <property name="minimum">
-                   <double>-99.989999999999995</double>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-             </item>
-             <item>
-              <widget class="QWidget" name="widget_z1" native="true">
-               <layout class="QHBoxLayout" name="horizontalLayout_4">
-                <property name="spacing">
-                 <number>1</number>
-                </property>
-                <property name="leftMargin">
-                 <number>2</number>
-                </property>
-                <property name="topMargin">
-                 <number>2</number>
-                </property>
-                <property name="rightMargin">
-                 <number>2</number>
-                </property>
-                <property name="bottomMargin">
-                 <number>2</number>
-                </property>
-                <item>
-                 <widget class="QLabel" name="label_z1">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="frameShadow">
-                   <enum>QFrame::Raised</enum>
-                  </property>
-                  <property name="text">
-                   <string>z : </string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QDoubleSpinBox" name="spinbox_z1">
-                  <property name="decimals">
-                   <number>7</number>
-                  </property>
-                  <property name="minimum">
-                   <double>-99.989999999999995</double>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
-          <item>
-           <widget class="QFrame" name="horizontalFrame">
-            <property name="frameShape">
-             <enum>QFrame::StyledPanel</enum>
-            </property>
-            <property name="frameShadow">
-             <enum>QFrame::Raised</enum>
-            </property>
-            <layout class="QVBoxLayout" name="verticalLayout_4">
-             <property name="spacing">
-              <number>1</number>
-             </property>
-             <property name="leftMargin">
-              <number>2</number>
-             </property>
-             <property name="topMargin">
-              <number>2</number>
-             </property>
-             <property name="rightMargin">
-              <number>2</number>
-             </property>
-             <property name="bottomMargin">
-              <number>2</number>
-             </property>
-             <item>
-              <widget class="QLabel" name="label_arrivee">
                <property name="text">
-                <string>Point d'arrivée</string>
+                <string>  f1 : </string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QWidget" name="widget_x2" native="true">
-               <layout class="QHBoxLayout" name="horizontalLayout_10">
-                <property name="spacing">
-                 <number>1</number>
-                </property>
-                <property name="leftMargin">
-                 <number>2</number>
-                </property>
-                <property name="topMargin">
-                 <number>2</number>
-                </property>
-                <property name="rightMargin">
-                 <number>2</number>
-                </property>
-                <property name="bottomMargin">
-                 <number>2</number>
-                </property>
-                <item>
-                 <widget class="QLabel" name="label_x2">
-                  <property name="text">
-                   <string>x :</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QDoubleSpinBox" name="spinbox_x2">
-                  <property name="decimals">
-                   <number>7</number>
-                  </property>
-                  <property name="minimum">
-                   <double>-99.989999999999995</double>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
+              <widget class="QSpinBox" name="spinBox_v1_chemin">
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+               <property name="minimum">
+                <number>-1</number>
+               </property>
+               <property name="maximum">
+                <number>9999</number>
+               </property>
               </widget>
              </item>
              <item>
-              <widget class="QWidget" name="widget_y2" native="true">
-               <layout class="QHBoxLayout" name="horizontalLayout_11">
-                <property name="spacing">
-                 <number>1</number>
-                </property>
-                <property name="leftMargin">
-                 <number>2</number>
-                </property>
-                <property name="topMargin">
-                 <number>2</number>
-                </property>
-                <property name="rightMargin">
-                 <number>2</number>
-                </property>
-                <property name="bottomMargin">
-                 <number>2</number>
-                </property>
-                <item>
-                 <widget class="QLabel" name="label_y2">
-                  <property name="text">
-                   <string>y : </string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QDoubleSpinBox" name="spinbox_y2">
-                  <property name="decimals">
-                   <number>7</number>
-                  </property>
-                  <property name="minimum">
-                   <double>-99.989999999999995</double>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
+              <widget class="QLabel" name="label_v2_chemin">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>  f2 : </string>
+               </property>
               </widget>
              </item>
              <item>
-              <widget class="QWidget" name="widget_z2" native="true">
-               <layout class="QHBoxLayout" name="horizontalLayout_12">
-                <property name="spacing">
-                 <number>1</number>
-                </property>
-                <property name="leftMargin">
-                 <number>2</number>
-                </property>
-                <property name="topMargin">
-                 <number>2</number>
-                </property>
-                <property name="rightMargin">
-                 <number>2</number>
-                </property>
-                <property name="bottomMargin">
-                 <number>2</number>
-                </property>
-                <item>
-                 <widget class="QLabel" name="label_z2">
-                  <property name="text">
-                   <string>z : </string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QDoubleSpinBox" name="spinbox_z2">
-                  <property name="decimals">
-                   <number>7</number>
-                  </property>
-                  <property name="minimum">
-                   <double>-99.989999999999995</double>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
+              <widget class="QSpinBox" name="spinBox_v2_chemin">
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+               <property name="minimum">
+                <number>-1</number>
+               </property>
+               <property name="maximum">
+                <number>9999</number>
+               </property>
+               <property name="value">
+                <number>0</number>
+               </property>
               </widget>
              </item>
             </layout>
@@ -489,7 +254,7 @@
                 <item>
                  <widget class="QLabel" name="label_dx1">
                   <property name="text">
-                   <string>f1 :</string>
+                   <string>s1 :</string>
                   </property>
                  </widget>
                 </item>
@@ -542,7 +307,7 @@
                 <item>
                  <widget class="QLabel" name="label_dy1">
                   <property name="text">
-                   <string>f2 :</string>
+                   <string>s2 :</string>
                   </property>
                  </widget>
                 </item>
@@ -595,7 +360,7 @@
                    <enum>QFrame::Plain</enum>
                   </property>
                   <property name="text">
-                   <string>f3 :</string>
+                   <string>s3 :</string>
                   </property>
                  </widget>
                 </item>
@@ -677,7 +442,7 @@
                 <item>
                  <widget class="QLabel" name="label_dx2">
                   <property name="text">
-                   <string>f1 :</string>
+                   <string>s1 :</string>
                   </property>
                  </widget>
                 </item>
@@ -721,7 +486,7 @@
                 <item>
                  <widget class="QLabel" name="label_dy2">
                   <property name="text">
-                   <string>f2 :</string>
+                   <string>s2 :</string>
                   </property>
                  </widget>
                 </item>
@@ -765,7 +530,7 @@
                 <item>
                  <widget class="QLabel" name="label_dz2">
                   <property name="text">
-                   <string>f3 :</string>
+                   <string>s3 :</string>
                   </property>
                  </widget>
                 </item>
@@ -795,101 +560,366 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="label_9">
+        <widget class="QLabel" name="label_10">
          <property name="text">
-          <string>Sélection par sommet</string>
+          <string>Sélection par coordonnées</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QFrame" name="frame_2">
+        <widget class="QFrame" name="frame_coordonnees">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>20</height>
+          </size>
+         </property>
          <property name="frameShape">
-          <enum>QFrame::StyledPanel</enum>
+          <enum>QFrame::NoFrame</enum>
          </property>
-         <property name="frameShadow">
-          <enum>QFrame::Raised</enum>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_3">
-          <property name="spacing">
-           <number>2</number>
-          </property>
-          <property name="leftMargin">
-           <number>1</number>
-          </property>
-          <property name="topMargin">
-           <number>2</number>
-          </property>
-          <property name="rightMargin">
-           <number>2</number>
-          </property>
-          <property name="bottomMargin">
-           <number>2</number>
-          </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_9">
           <item>
-           <widget class="QWidget" name="widget_5" native="true">
-            <layout class="QHBoxLayout" name="horizontalLayout_5">
+           <widget class="QFrame" name="frame">
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_2">
              <property name="spacing">
               <number>1</number>
              </property>
              <property name="leftMargin">
-              <number>1</number>
+              <number>2</number>
              </property>
              <property name="topMargin">
-              <number>1</number>
+              <number>2</number>
              </property>
              <property name="rightMargin">
-              <number>1</number>
+              <number>2</number>
              </property>
              <property name="bottomMargin">
-              <number>1</number>
+              <number>2</number>
              </property>
              <item>
-              <widget class="QLabel" name="label_v1_chemin">
+              <widget class="QLabel" name="label_depart">
+               <property name="text">
+                <string>Point de départ</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QWidget" name="widget_x1" native="true">
+               <layout class="QHBoxLayout" name="horizontalLayout_2">
+                <property name="spacing">
+                 <number>1</number>
+                </property>
+                <property name="leftMargin">
+                 <number>2</number>
+                </property>
+                <property name="topMargin">
+                 <number>2</number>
+                </property>
+                <property name="rightMargin">
+                 <number>2</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>2</number>
+                </property>
+                <item>
+                 <widget class="QLabel" name="label_x1">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="text">
+                   <string>x : </string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QDoubleSpinBox" name="spinbox_x1">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="readOnly">
+                   <bool>true</bool>
+                  </property>
+                  <property name="decimals">
+                   <number>7</number>
+                  </property>
+                  <property name="minimum">
+                   <double>-99.989999999999995</double>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QWidget" name="widget_y1" native="true">
                <property name="sizePolicy">
-                <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
+               <layout class="QHBoxLayout" name="horizontalLayout_3">
+                <property name="spacing">
+                 <number>1</number>
+                </property>
+                <property name="leftMargin">
+                 <number>2</number>
+                </property>
+                <property name="topMargin">
+                 <number>2</number>
+                </property>
+                <property name="rightMargin">
+                 <number>2</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>2</number>
+                </property>
+                <item>
+                 <widget class="QLabel" name="label_y1">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="text">
+                   <string>y : </string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QDoubleSpinBox" name="spinbox_y1">
+                  <property name="readOnly">
+                   <bool>true</bool>
+                  </property>
+                  <property name="decimals">
+                   <number>7</number>
+                  </property>
+                  <property name="minimum">
+                   <double>-99.989999999999995</double>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QWidget" name="widget_z1" native="true">
+               <layout class="QHBoxLayout" name="horizontalLayout_4">
+                <property name="spacing">
+                 <number>1</number>
+                </property>
+                <property name="leftMargin">
+                 <number>2</number>
+                </property>
+                <property name="topMargin">
+                 <number>2</number>
+                </property>
+                <property name="rightMargin">
+                 <number>2</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>2</number>
+                </property>
+                <item>
+                 <widget class="QLabel" name="label_z1">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
+                  <property name="text">
+                   <string>z : </string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QDoubleSpinBox" name="spinbox_z1">
+                  <property name="readOnly">
+                   <bool>true</bool>
+                  </property>
+                  <property name="decimals">
+                   <number>7</number>
+                  </property>
+                  <property name="minimum">
+                   <double>-99.989999999999995</double>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QFrame" name="horizontalFrame">
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_4">
+             <property name="spacing">
+              <number>1</number>
+             </property>
+             <property name="leftMargin">
+              <number>2</number>
+             </property>
+             <property name="topMargin">
+              <number>2</number>
+             </property>
+             <property name="rightMargin">
+              <number>2</number>
+             </property>
+             <property name="bottomMargin">
+              <number>2</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="label_arrivee">
                <property name="text">
-                <string>  v1 : </string>
+                <string>Point d'arrivée</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QSpinBox" name="spinBox_v1_chemin">
-               <property name="minimum">
-                <number>-1</number>
-               </property>
-               <property name="maximum">
-                <number>9999</number>
-               </property>
+              <widget class="QWidget" name="widget_x2" native="true">
+               <layout class="QHBoxLayout" name="horizontalLayout_10">
+                <property name="spacing">
+                 <number>1</number>
+                </property>
+                <property name="leftMargin">
+                 <number>2</number>
+                </property>
+                <property name="topMargin">
+                 <number>2</number>
+                </property>
+                <property name="rightMargin">
+                 <number>2</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>2</number>
+                </property>
+                <item>
+                 <widget class="QLabel" name="label_x2">
+                  <property name="text">
+                   <string>x :</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QDoubleSpinBox" name="spinbox_x2">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="readOnly">
+                   <bool>true</bool>
+                  </property>
+                  <property name="decimals">
+                   <number>7</number>
+                  </property>
+                  <property name="minimum">
+                   <double>-99.989999999999995</double>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
               </widget>
              </item>
              <item>
-              <widget class="QLabel" name="label_v2_chemin">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>  v2 : </string>
-               </property>
+              <widget class="QWidget" name="widget_y2" native="true">
+               <layout class="QHBoxLayout" name="horizontalLayout_11">
+                <property name="spacing">
+                 <number>1</number>
+                </property>
+                <property name="leftMargin">
+                 <number>2</number>
+                </property>
+                <property name="topMargin">
+                 <number>2</number>
+                </property>
+                <property name="rightMargin">
+                 <number>2</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>2</number>
+                </property>
+                <item>
+                 <widget class="QLabel" name="label_y2">
+                  <property name="text">
+                   <string>y : </string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QDoubleSpinBox" name="spinbox_y2">
+                  <property name="readOnly">
+                   <bool>true</bool>
+                  </property>
+                  <property name="decimals">
+                   <number>7</number>
+                  </property>
+                  <property name="minimum">
+                   <double>-99.989999999999995</double>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
               </widget>
              </item>
              <item>
-              <widget class="QSpinBox" name="spinBox_v2_chemin">
-               <property name="minimum">
-                <number>-1</number>
-               </property>
-               <property name="maximum">
-                <number>9999</number>
-               </property>
-               <property name="value">
-                <number>0</number>
-               </property>
+              <widget class="QWidget" name="widget_z2" native="true">
+               <layout class="QHBoxLayout" name="horizontalLayout_12">
+                <property name="spacing">
+                 <number>1</number>
+                </property>
+                <property name="leftMargin">
+                 <number>2</number>
+                </property>
+                <property name="topMargin">
+                 <number>2</number>
+                </property>
+                <property name="rightMargin">
+                 <number>2</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>2</number>
+                </property>
+                <item>
+                 <widget class="QLabel" name="label_z2">
+                  <property name="text">
+                   <string>z : </string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QDoubleSpinBox" name="spinbox_z2">
+                  <property name="readOnly">
+                   <bool>true</bool>
+                  </property>
+                  <property name="decimals">
+                   <number>7</number>
+                  </property>
+                  <property name="minimum">
+                   <double>-99.989999999999995</double>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
               </widget>
              </item>
             </layout>
@@ -939,7 +969,7 @@
      <x>0</x>
      <y>0</y>
      <width>645</width>
-     <height>15</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>

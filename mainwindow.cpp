@@ -579,6 +579,9 @@ void MainWindow::enableSliders(bool enable)
     ui->slider_dx2->setValue(33);
     ui->slider_dy2->setValue(33);
     ui->slider_dz2->setValue(33);
+
+    ui->spinBox_v1_chemin->setReadOnly(!enable);
+    ui->spinBox_v2_chemin->setReadOnly(!enable);
 }
 
 void MainWindow::on_pushButton_chargement_clicked()
@@ -785,8 +788,11 @@ void MainWindow::displayMesh(MyMesh* _mesh)
     delete[] pointsVerts;
 
     // Affichage points sur la face
-    displayStartFacePoint();
-    displayEndFacePoint();
+    if (_mesh->n_vertices() > 0)
+    {
+        displayStartFacePoint();
+        displayEndFacePoint();
+    }
 }
 
 // charge un chemin geodesique dans l'environnement OpenGL
@@ -980,6 +986,13 @@ void MainWindow::on_slider_dx1_valueChanged(int arg1)
         y1 = y1*partB/partA;
         z1 = z1*partB/partA;
 
+        if (x1+y1+z1 < 100)
+        {
+            if (z1 > y1) z1++;
+            else y1++;
+        }
+
+
         ui->slider_dx1->setValue(x1);
         ui->slider_dy1->setValue(y1);
         ui->slider_dz1->setValue(z1);
@@ -1002,6 +1015,12 @@ void MainWindow::on_slider_dy1_valueChanged(int arg1)
 
         x1 = x1*partB/partA;
         z1 = z1*partB/partA;
+
+        if (x1+y1+z1 < 100)
+        {
+            if (x1 > z1) x1++;
+            else z1++;
+        }
 
         ui->slider_dx1->setValue(x1);
         ui->slider_dy1->setValue(y1);
@@ -1026,6 +1045,12 @@ void MainWindow::on_slider_dz1_valueChanged(int arg1)
         y1 = y1*partB/partA;
         x1 = x1*partB/partA;
 
+        if (x1+y1+z1 < 100)
+        {
+            if (x1 > y1) x1++;
+            else y1++;
+        }
+
         ui->slider_dx1->setValue(x1);
         ui->slider_dy1->setValue(y1);
         ui->slider_dz1->setValue(z1);
@@ -1048,6 +1073,12 @@ void MainWindow::on_slider_dx2_valueChanged(int arg1)
 
         y2 = y2*partB/partA;
         z2 = z2*partB/partA;
+
+        if (x2+y2+z2 < 100)
+        {
+            if (z2 > y2) z2++;
+            else y2++;
+        }
 
         ui->slider_dx2->setValue(x2);
         ui->slider_dy2->setValue(y2);
@@ -1072,6 +1103,12 @@ void MainWindow::on_slider_dy2_valueChanged(int arg1)
         x2 = x2*partB/partA;
         z2 = z2*partB/partA;
 
+        if (x2+y2+z2 < 100)
+        {
+            if (x2 > z2) x2++;
+            else z2++;
+        }
+
         ui->slider_dx2->setValue(x2);
         ui->slider_dy2->setValue(y2);
         ui->slider_dz2->setValue(z2);
@@ -1094,6 +1131,12 @@ void MainWindow::on_slider_dz2_valueChanged(int arg1)
 
         y2 = y2*partB/partA;
         x2 = x2*partB/partA;
+
+        if (x2+y2+z2 < 100)
+        {
+            if (x2 > y2) x2++;
+            else y2++;
+        }
 
         ui->slider_dx2->setValue(x2);
         ui->slider_dy2->setValue(y2);
