@@ -562,7 +562,7 @@
        <item>
         <widget class="QLabel" name="label_10">
          <property name="text">
-          <string>Sélection par coordonnées</string>
+          <string>Coordonnées</string>
          </property>
         </widget>
        </item>
