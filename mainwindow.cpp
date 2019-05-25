@@ -402,7 +402,11 @@ void MainWindow::on_pushButton_chargement_clicked()
     // on affiche le maillage
     displayMesh(&mesh);
     if (mesh.n_vertices() > 0)
+    {
         enableSliders(true);
+        ui->spinBox_v1_chemin->setMaximum(mesh.n_faces());
+        ui->spinBox_v2_chemin->setMaximum(mesh.n_faces());
+    }
 }
 
 /* **** fin de la partie boutons et IHM **** */
