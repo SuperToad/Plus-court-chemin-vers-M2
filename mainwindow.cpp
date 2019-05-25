@@ -7,150 +7,8 @@
 #include "ChenHanImproved/ImprovedCHWithFilteringRule.h"
 #include "ChenHanImproved/XinWangImprovedCH.h"
 #include <QDebug>
+#include <QElapsedTimer>
 
-/* **** début de la partie à compléter **** */
-/*
-void MainWindow::showSelections(MyMesh* _mesh)
-{
-    // on réinitialise les couleurs de tout le maillage
-    resetAllColorsAndThickness(_mesh);
-
-    if(faceSelection > -1) {
-        FaceHandle faceHandle = _mesh->face_handle(faceSelection);
-        _mesh->set_color(faceHandle, MyMesh::Color(50,50,255));
-
-        MyMesh::FaceEdgeIter fh_it = mesh.fe_iter(faceHandle);
-        for(; fh_it.is_valid(); ++fh_it) {
-            EdgeHandle edgeHandle = *fh_it;
-            _mesh->set_color(edgeHandle, MyMesh::Color(0, 0, 255));
-            _mesh->data(edgeHandle).thickness = 3;
-        }
-
-        MyMesh::FaceVertexIter fh_v = mesh.fv_iter(faceHandle);
-        for(; fh_v.is_valid(); ++fh_v) {
-            VertexHandle vertexHandle = *fh_v;
-            _mesh->set_color(vertexHandle, MyMesh::Color(0, 0, 255));
-            _mesh->data(vertexHandle).thickness = 7;
-        }
-    }
-
-    if(edgeSelection > -1) {
-        EdgeHandle edgeHandle = _mesh->edge_handle(edgeSelection);
-        _mesh->set_color(edgeHandle, MyMesh::Color(0, 255, 0));
-        _mesh->data(edgeHandle).thickness = 3;
-
-        HalfedgeHandle heh0 = _mesh->halfedge_handle(edgeHandle, 0); // la première demi-arête
-        HalfedgeHandle heh1 = _mesh->halfedge_handle(edgeHandle, 1); // la seconde demi-arête
-
-        VertexHandle v = _mesh->to_vertex_handle(heh0);
-        _mesh->set_color(v, MyMesh::Color(0,255,0));
-        _mesh->data(v).thickness = 7;
-        v = _mesh->to_vertex_handle(heh1);
-        _mesh->set_color(v, MyMesh::Color(0,255,0));
-        _mesh->data(v).thickness = 7;
-    }
-
-    if(vertexSelection > -1) {
-        VertexHandle vertexHandle = _mesh->vertex_handle(vertexSelection);
-        _mesh->set_color(vertexHandle, MyMesh::Color(255, 0, 0));
-        _mesh->data(vertexHandle).thickness = 7;
-    }
-
-    // on affiche le nouveau maillage
-    displayMesh(_mesh);
-}
-*/
-
-/*
-void MainWindow::showSelectionsNeighborhood(MyMesh* _mesh)
-{
-    // on réinitialise les couleurs de tout le maillage
-    resetAllColorsAndThickness(_mesh);
-
-    if(faceSelection > -1) {
-        FaceHandle faceHandle = _mesh->face_handle(faceSelection);
-
-
-        MyMesh::FaceEdgeIter fh_it = mesh.fe_iter(faceHandle);
-        for(; fh_it.is_valid(); ++fh_it) {
-            EdgeHandle edgeHandle = *fh_it;
-            _mesh->set_color(edgeHandle, MyMesh::Color(0, 0, 255));
-            _mesh->data(edgeHandle).thickness = 3;
-
-            HalfedgeHandle heh0 = _mesh->halfedge_handle(edgeHandle, 0); // la première demi-arête
-            HalfedgeHandle heh1 = _mesh->halfedge_handle(edgeHandle, 1); // la seconde demi-arête
-
-            FaceHandle fh = _mesh->face_handle(heh0);
-            _mesh->set_color(fh, MyMesh::Color(100,100,255));
-
-            fh = _mesh->face_handle(heh1);
-            _mesh->set_color(fh, MyMesh::Color(100,100,255));
-        }
-
-        _mesh->set_color(faceHandle, MyMesh::Color(50,50,255));
-
-        MyMesh::FaceVertexIter fh_v = mesh.fv_iter(faceHandle);
-        for(; fh_v.is_valid(); ++fh_v) {
-            VertexHandle vertexHandle = *fh_v;
-            _mesh->set_color(vertexHandle, MyMesh::Color(0, 0, 255));
-            _mesh->data(vertexHandle).thickness = 7;
-        }
-    }
-
-    if(edgeSelection > -1) {
-        EdgeHandle edgeHandle = _mesh->edge_handle(edgeSelection);
-        _mesh->set_color(edgeHandle, MyMesh::Color(0, 255, 0));
-        _mesh->data(edgeHandle).thickness = 3;
-
-        HalfedgeHandle heh0 = _mesh->halfedge_handle(edgeHandle, 0); // la première demi-arête
-        HalfedgeHandle heh1 = _mesh->halfedge_handle(edgeHandle, 1); // la seconde demi-arête
-
-        FaceHandle fh = _mesh->face_handle(heh0);
-        _mesh->set_color(fh, MyMesh::Color(100,255,100));
-
-        fh = _mesh->face_handle(heh1);
-        _mesh->set_color(fh, MyMesh::Color(100,255,100));
-
-        VertexHandle v = _mesh->to_vertex_handle(heh0);
-        _mesh->set_color(v, MyMesh::Color(0,255,0));
-        _mesh->data(v).thickness = 7;
-        v = _mesh->to_vertex_handle(heh1);
-        _mesh->set_color(v, MyMesh::Color(0,255,0));
-        _mesh->data(v).thickness = 7;
-    }
-
-    if(vertexSelection > -1) {
-        VertexHandle vertexHandle = _mesh->vertex_handle(vertexSelection);
-        _mesh->set_color(vertexHandle, MyMesh::Color(255, 0, 0));
-        _mesh->data(vertexHandle).thickness = 7;
-
-        MyMesh::VertexEdgeIter v_it = mesh.ve_iter(vertexHandle);
-        for(; v_it.is_valid(); ++v_it) {
-            EdgeHandle edgeHandle = *v_it;
-            _mesh->set_color(edgeHandle, MyMesh::Color(255, 0, 0));
-            _mesh->data(edgeHandle).thickness = 3;
-        }
-    }
-    displayMesh(_mesh);
-}
-
-void MainWindow::showBorder(MyMesh* _mesh)
-{
-    // on réinitialise l'affichage
-    resetAllColorsAndThickness(_mesh);
-
-    for (MyMesh::EdgeIter curEdge = _mesh->edges_begin(); curEdge != _mesh->edges_end(); curEdge++)
-    {
-        EdgeHandle eh = *curEdge;
-        if(_mesh->is_boundary(eh)){
-            _mesh->set_color(eh, MyMesh::Color(0, 255, 255));
-            _mesh->data(eh).thickness = 3;
-        }
-
-    }
-    displayMesh(_mesh);
-}
-*/
 
 void MainWindow::showSelections(MyMesh* _mesh){
     // on réinitialise les couleurs de tout le maillage
@@ -324,8 +182,12 @@ void MainWindow::showPath(MyMesh* _mesh)
         return;
     }
 
+    QElapsedTimer timer;
+    timer.start();
     if(Dijkstra(_mesh, face1, face2) == 0){
-        qDebug() << "Distance avec Dijkstra :" << finalDist;
+        qDebug() << "Distance avec Dijkstra : " << finalDist;
+        qDebug() << "Temps de calcul avec Dijkstra : " << timer.elapsed() << "ms";
+        timer.invalidate();
         for (MyMesh::VertexIter v_it=_mesh->vertices_sbegin(); v_it!=_mesh->vertices_end(); ++v_it)
         {
             if(_mesh->data(*v_it).checked == true){
@@ -396,7 +258,11 @@ void MainWindow::showPathGeo(MyMesh* _mesh)
     }
     resetAllColorsAndThickness(_mesh);
 
+    QElapsedTimer timer;
+    timer.start();
     if(Dijkstra(_mesh, face1, face2) == 0){
+        qDebug() << "Temps de calcul partie Dijkstra : " << timer.elapsed() << "ms";
+        qDebug() << "Distance avec Dijkstra : " << finalDist;
 
         //affichage des face à défaut des points
         FaceHandle vh1 = _mesh->face_handle(face1);
@@ -419,18 +285,21 @@ void MainWindow::showPathGeo(MyMesh* _mesh)
 
         // Debut utilisation CHI
         CExactMethodForDGP * algorithm = new CXinWangImprovedCH(*model, vertex1);
+        timer.restart();
         algorithm->Execute();
         vector<CPoint3D> resultpoints;
         if (!(vertex2 < 0 || vertex2 >=  model->GetNumOfVerts()))
         {
             algorithm->BackTrace(vertex2, resultpoints);
+            qDebug() << "Temps de calcul partie geodesique : " << timer.elapsed() << "ms";
+            qDebug() << "Distance avec geodesique : " << calculDistances(resultpoints);
             /*for (int i = resultpoints.size() -1; i >=0; --i)
             {
                 qDebug() << "(" << resultpoints[i].x << ", " << resultpoints[i].y << ", " << resultpoints[i].z << ")";
             }*/
         }
+        timer.invalidate();
         // Fin utilisation CHI
-        qDebug() << "Distance avec geodesique : " << calculDistances(resultpoints);
         // Affichage chemin obtenu avec CHI, a faire apres displayMesh
         displayPath(resultpoints);
     }
@@ -459,115 +328,6 @@ float MainWindow::calculDistances(vector<CPoint3D> resultpoints)
     return result;
 }
 
-/* **** fin de la partie à compléter **** */
-
-
-/* **** début de la partie boutons et IHM **** */
-/*
-void MainWindow::on_pushButton_bordure_clicked()
-{
-    showBorder(&mesh);
-}
-
-//void MainWindow::on_pushButton_voisinage_clicked()
-//{
-//    // changement de mode entre avec et sans voisinage
-//    if(modevoisinage)
-//    {
-//        ui->pushButton_voisinage->setText("Repasser en mode normal");
-//        modevoisinage = false;
-//    }
-//    else
-//    {
-//        ui->pushButton_voisinage->setText("Passer en mode voisinage");
-//        modevoisinage = true;
-//    }
-
-//    // on montre la nouvelle selection
-//    if(!modevoisinage)
-//        showSelections(&mesh);
-//    else
-//        showSelectionsNeighborhood(&mesh);
-//}
-
-
-//void MainWindow::on_pushButton_vertexMoins_clicked()
-//{
-//    // mise à jour de l'interface
-//    vertexSelection = vertexSelection - 1;
-//    ui->labelVertex->setText(QString::number(vertexSelection));
-
-//    // on montre la nouvelle selection
-//    if(!modevoisinage)
-//        showSelections(&mesh);
-//    else
-//        showSelectionsNeighborhood(&mesh);
-//}
-
-//void MainWindow::on_pushButton_vertexPlus_clicked()
-//{
-//    // mise à jour de l'interface
-//    vertexSelection = vertexSelection + 1;
-//    ui->labelVertex->setText(QString::number(vertexSelection));
-
-//    // on montre la nouvelle selection
-//    if(!modevoisinage)
-//        showSelections(&mesh);
-//    else
-//        showSelectionsNeighborhood(&mesh);
-//}
-
-//void MainWindow::on_pushButton_edgeMoins_clicked()
-//{
-//    // mise à jour de l'interface
-//    edgeSelection = edgeSelection - 1;
-//    ui->labelEdge->setText(QString::number(edgeSelection));
-
-//    // on montre la nouvelle selection
-//    if(!modevoisinage)
-//        showSelections(&mesh);
-//    else
-//        showSelectionsNeighborhood(&mesh);
-//}
-
-//void MainWindow::on_pushButton_edgePlus_clicked()
-//{
-//    // mise à jour de l'interface
-//    edgeSelection = edgeSelection + 1;
-//    ui->labelEdge->setText(QString::number(edgeSelection));
-
-//    // on montre la nouvelle selection
-//    if(!modevoisinage)
-//        showSelections(&mesh);
-//    else
-//        showSelectionsNeighborhood(&mesh);
-//}
-
-//void MainWindow::on_pushButton_faceMoins_clicked()
-//{
-//    // mise à jour de l'interface
-//    faceSelection = faceSelection - 1;
-//    ui->labelFace->setText(QString::number(faceSelection));
-
-//    // on montre la nouvelle selection
-//    if(!modevoisinage)
-//        showSelections(&mesh);
-//    else
-//        showSelectionsNeighborhood(&mesh);
-//}
-
-//void MainWindow::on_pushButton_facePlus_clicked()
-//{
-//    // mise à jour de l'interface
-//    faceSelection = faceSelection + 1;
-//    ui->labelFace->setText(QString::number(faceSelection));
-
-//    // on montre la nouvelle selection
-//    if(!modevoisinage)
-//        showSelections(&mesh);
-//    else
-//        showSelectionsNeighborhood(&mesh);
-//}*/
 
 void MainWindow::on_pushButton_afficherChemin_clicked()
 {
