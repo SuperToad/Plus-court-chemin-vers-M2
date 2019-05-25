@@ -775,7 +775,7 @@ void MainWindow::on_slider_dx1_valueChanged(int arg1)
 
         if (x1+y1+z1 < 100)
         {
-            if (z1 > y1) z1++;
+            if (z1 < y1) z1++;
             else y1++;
         }
 
@@ -805,7 +805,7 @@ void MainWindow::on_slider_dy1_valueChanged(int arg1)
 
         if (x1+y1+z1 < 100)
         {
-            if (x1 > z1) x1++;
+            if (x1 < z1) x1++;
             else z1++;
         }
 
@@ -834,7 +834,7 @@ void MainWindow::on_slider_dz1_valueChanged(int arg1)
 
         if (x1+y1+z1 < 100)
         {
-            if (x1 > y1) x1++;
+            if (x1 < y1) x1++;
             else y1++;
         }
 
@@ -863,7 +863,7 @@ void MainWindow::on_slider_dx2_valueChanged(int arg1)
 
         if (x2+y2+z2 < 100)
         {
-            if (z2 > y2) z2++;
+            if (z2 < y2) z2++;
             else y2++;
         }
 
@@ -892,7 +892,7 @@ void MainWindow::on_slider_dy2_valueChanged(int arg1)
 
         if (x2+y2+z2 < 100)
         {
-            if (x2 > z2) x2++;
+            if (x2 < z2) x2++;
             else z2++;
         }
 
@@ -921,7 +921,7 @@ void MainWindow::on_slider_dz2_valueChanged(int arg1)
 
         if (x2+y2+z2 < 100)
         {
-            if (x2 > y2) x2++;
+            if (x2 < y2) x2++;
             else y2++;
         }
 
